@@ -1,10 +1,10 @@
 package com.vincent.network
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.vincent.network.apis.FactsApi
 import com.vincent.network.apis.SuggestionsApi
 import com.vincent.network.interceptors.HeaderInterceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -28,28 +28,21 @@ val networkModule = module {
     }
 
     single {
-        OkHttpClient.Builder()
-            .addInterceptor(get<HttpLoggingInterceptor>())
+        val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(get<HeaderInterceptor>())
-            .build()
+
+        if (BuildConfig.DEBUG) {
+            okHttpClient.addInterceptor(get<StethoInterceptor>())
+        }
+        return@single okHttpClient
     }
 
     single {
-        HttpLoggingInterceptor().apply {
-            level = get()
-        }
+        StethoInterceptor()
     }
 
     single {
         HeaderInterceptor()
-    }
-
-    single {
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor.Level.BODY
-        } else {
-            HttpLoggingInterceptor.Level.NONE
-        }
     }
 
     single {

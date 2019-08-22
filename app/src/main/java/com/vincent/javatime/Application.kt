@@ -1,6 +1,7 @@
 package com.vincent.javatime
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.vincent.core.parsing.moshiModule
 import com.vincent.core.utils.utilsModule
 import com.vincent.network.networkModule
@@ -16,6 +17,11 @@ class Application : Application() {
 
         setupLogging()
         setupDependencyInjection()
+        setupStetho()
+    }
+
+    private fun setupLogging() {
+        Timber.plant()
     }
 
     private fun setupDependencyInjection() {
@@ -26,8 +32,8 @@ class Application : Application() {
         }
     }
 
-    private fun setupLogging() {
-        Timber.plant()
+    private fun setupStetho() {
+        Stetho.initializeWithDefaults(this)
     }
 }
 
