@@ -18,4 +18,5 @@
 -dontwarn org.codehaus.mojo.animal_sniffer.*
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
 
+#Keep Model Classes
 -keep class com.vincent.network.models.** { *; }
