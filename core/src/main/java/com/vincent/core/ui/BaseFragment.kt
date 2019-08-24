@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.annotation.CallSuper
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -64,11 +63,11 @@ abstract class BaseFragment : Fragment() {
     }
 
     @CallSuper
-    protected fun onViewStateReceived(viewState: ViewState) {
+    protected fun onViewStateReceived(viewState: BaseViewState) {
         when (viewState) {
-            is ViewState.LoadingState -> renderLoadingState()
-            is ViewState.ContentState -> renderContentState(viewState)
-            is ViewState.ErrorState -> renderErrorState(viewState)
+            is BaseViewState.LoadingState -> renderLoadingState()
+            is BaseViewState.ContentState -> renderContentState(viewState)
+            is BaseViewState.ErrorState -> renderErrorState(viewState)
         }
     }
 
@@ -78,12 +77,12 @@ abstract class BaseFragment : Fragment() {
     }
 
     @CallSuper
-    protected fun renderContentState(viewState: ViewState) {
+    protected fun renderContentState(viewState: BaseViewState) {
 
     }
 
     @CallSuper
-    protected fun renderErrorState(viewState: ViewState) {
+    protected fun renderErrorState(viewState: BaseViewState) {
 
     }
 
@@ -92,8 +91,12 @@ abstract class BaseFragment : Fragment() {
         toast!!.show()
     }
 
-    private fun onNavigationEventReceived(@IdRes id: Int) {
-        navController.navigate(id)
+    private fun onNavigationEventReceived(event: NavigationEvent) {
+        when (event) {
+            is NavigationEvent.UriEvent -> navController.navigate(event.uri)
+            is NavigationEvent.IdEvent -> navController.navigate(event.id, event.args)
+            is NavigationEvent.BackEvent -> navController.popBackStack()
+        }
     }
 
     override fun onDestroy() {

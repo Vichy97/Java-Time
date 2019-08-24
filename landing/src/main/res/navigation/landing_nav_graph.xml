@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/landing_nav_graph"
+    app:startDestination="@id/landingFragment"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.vincent.landing.LandingFragment"
+        android:label="fragment_landing"
+        tools:layout="@layout/fragment_landing">
+
+        <deepLink app:uri="javatime://landing"/>
+    </fragment>
+</navigation>

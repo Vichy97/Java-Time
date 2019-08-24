@@ -28,13 +28,12 @@ val networkModule = module {
     }
 
     single {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(get<HeaderInterceptor>())
-
-        if (BuildConfig.DEBUG) {
-            okHttpClient.addInterceptor(get<StethoInterceptor>())
-        }
-        return@single okHttpClient
+        OkHttpClient.Builder().apply {
+            addInterceptor(get<HeaderInterceptor>())
+            if (BuildConfig.DEBUG) {
+                addInterceptor(get<StethoInterceptor>())
+            }
+        }.build()
     }
 
     single {

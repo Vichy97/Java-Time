@@ -18,14 +18,12 @@ android {
 
     buildTypes {
         all {
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
         }
         release {
-            minifyEnabled true
             buildConfigField "String", "API_BASE_URL", "\"release_url\""
         }
         debug {
-            minifyEnabled false
             buildConfigField "String", "API_BASE_URL", "\"debug_url\""
         }
     }

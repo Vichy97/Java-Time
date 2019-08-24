@@ -11,7 +11,7 @@ class HeaderInterceptor : Interceptor {
         val request = original.newBuilder()
             .addHeader("Accept", ContentType.JSON.toString())
             .addHeader("Content-Type", ContentType.FORM_URL_ENCODED.toString())
-            .method(original.method, original.body)
+            .method(original.method(), original.body())
             .build()
 
         return chain.proceed(request)

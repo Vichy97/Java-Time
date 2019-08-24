@@ -9,8 +9,7 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 @ExperimentalCoroutinesApi
 abstract class BaseViewModel : ViewModel() {
 
-    //publish subject. ConflatedBroadcastChannel = BehaviourSubhect
-    val viewStateChannel = ConflatedBroadcastChannel<ViewState>()
-    val navigationChannel = BroadcastChannel<Int>(Channel.CONFLATED)
+    val viewStateChannel = ConflatedBroadcastChannel<BaseViewState>()
+    val navigationChannel = BroadcastChannel<NavigationEvent>(Channel.CONFLATED)
     val toastChannel = BroadcastChannel<String>(Channel.CONFLATED)
 }
