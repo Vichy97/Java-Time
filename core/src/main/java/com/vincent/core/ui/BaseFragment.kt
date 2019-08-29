@@ -1,45 +1,43 @@
 package com.vincent.core.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
+import org.koin.core.module.Module
 
 @ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment(
+    @LayoutRes layoutId: Int,
+    private val module: Module
+) : Fragment(layoutId) {
 
-    protected lateinit var navController: NavController
-    protected lateinit var viewModel: BaseViewModel
+    protected abstract val viewModel: BaseViewModel
 
+    private lateinit var navController: NavController
     private var toast: Toast? = null
 
     private val uiJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + uiJob)
 
-    @LayoutRes
-    abstract fun getLayoutId(): Int
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(getLayoutId(), container, false)
+    init {
+        loadKoinModules(module)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        navController = findNavController()
         uiJob.start()
         subscribeToViewModel()
     }
@@ -72,19 +70,13 @@ abstract class BaseFragment : Fragment() {
     }
 
     @CallSuper
-    protected fun renderLoadingState() {
-
-    }
+    protected fun renderLoadingState() {}
 
     @CallSuper
-    protected fun renderContentState(viewState: BaseViewState) {
-
-    }
+    protected fun renderContentState(viewState: BaseViewState) {}
 
     @CallSuper
-    protected fun renderErrorState(viewState: BaseViewState) {
-
-    }
+    protected fun renderErrorState(viewState: BaseViewState) {}
 
     private fun onToastReceived(message: String) {
         toast = Toast.makeText(context, message, LENGTH_SHORT)
@@ -104,5 +96,7 @@ abstract class BaseFragment : Fragment() {
 
         uiJob.cancel()
         toast?.cancel()
+
+        unloadKoinModules(module)
     }
 }

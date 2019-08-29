@@ -1,3 +1,5 @@
 package com.vincent.network.models
 
-data class Fact(val body: String)
+import com.squareup.moshi.Json
+
+data class Fact(@Json(name = "body") val body: String = "")

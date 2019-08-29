@@ -5,7 +5,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 @ExperimentalCoroutinesApi
-val landingModule = module {
+internal val landingModule = module {
 
     viewModel {
         LandingViewModel(get())

@@ -9,5 +9,5 @@ import retrofit2.http.POST
 interface SuggestionsApi {
 
     @POST("/suggestions")
-    fun sendSuggestion(@Body suggestion: Suggestion): Response<ResponseBody>
+    suspend fun sendSuggestion(@Body suggestion: Suggestion)
 }

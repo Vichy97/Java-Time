@@ -5,5 +5,5 @@ import com.vincent.network.apis.FactsApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-internal class LandingViewModel(private val factsApi: FactsApi) : BaseViewModel() {
+class LandingViewModel(private val factsApi: FactsApi) : BaseViewModel() {
 }
