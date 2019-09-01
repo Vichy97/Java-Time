@@ -1,13 +1,13 @@
-package com.vincent.landing
+package com.vincent.landing.suggestion_dialog
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 @ExperimentalCoroutinesApi
-internal val landingModule = module {
+val suggestionModule = module {
 
     viewModel {
-        LandingViewModel(get())
+        SuggestionViewModel(get(), get())
     }
 }

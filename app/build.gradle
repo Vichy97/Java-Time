@@ -46,6 +46,7 @@ dependencies {
     //module dependencies
     implementation project(':core')
     implementation project(':network')
+    implementation project(':domain')
     implementation project(':landing')
 
     //dependencies

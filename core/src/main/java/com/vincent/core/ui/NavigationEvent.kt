@@ -9,6 +9,4 @@ abstract class NavigationEvent {
     data class UriEvent(val uri: Uri, val args: Bundle?) : NavigationEvent()
 
     data class IdEvent(@IdRes val id: Int, val args: Bundle?): NavigationEvent()
-
-    object BackEvent: NavigationEvent()
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import com.facebook.stetho.Stetho
 import com.vincent.core.parsing.moshiModule
 import com.vincent.core.utils.utilsModule
+import com.vincent.domain.repository.repositoryModule
 import com.vincent.network.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -37,4 +38,4 @@ class Application : Application() {
     }
 }
 
-private val modules = listOf(utilsModule, moshiModule, networkModule)
+private val modules = listOf(utilsModule, moshiModule, networkModule, repositoryModule)

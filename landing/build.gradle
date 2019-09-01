@@ -37,6 +37,7 @@ dependencies {
 
     //Dependencies
     implementation project(':core')
+    implementation project(':domain')
     implementation project(':network')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 

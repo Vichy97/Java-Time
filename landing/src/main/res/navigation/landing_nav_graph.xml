@@ -4,15 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/landing_nav_graph"
-    app:startDestination="@id/landingFragment"
-    tools:ignore="UnusedNavigation">
+    app:startDestination="@id/factListFragment">
 
     <fragment
-        android:id="@+id/landingFragment"
-        android:name="com.vincent.landing.LandingFragment"
+        android:id="@+id/factListFragment"
+        android:name="com.vincent.landing.fact_list.FactListFragment"
         android:label="fragment_landing"
-        tools:layout="@layout/fragment_landing">
+        tools:layout="@layout/fragment_fact_list">
 
-        <deepLink app:uri="javatime://landing"/>
+        <deepLink app:uri="javatime://fact_list"/>
+        <action
+            android:id="@+id/action_factListFragment_to_suggestionDialogFragment"
+            app:destination="@id/suggestionDialogFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/suggestionDialogFragment"
+        android:name="com.vincent.landing.suggestion_dialog.SuggestionDialogFragment"
+        android:label="SuggestionDialogFragment"
+        tools:layout="@layout/fragment_suggestion"/>
 </navigation>
