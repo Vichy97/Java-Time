@@ -6,6 +6,10 @@ import org.koin.dsl.module
 val utilsModule = module {
 
     single {
+        RxProvider()
+    }
+
+    single {
         ResourceProvider(get())
     }
 

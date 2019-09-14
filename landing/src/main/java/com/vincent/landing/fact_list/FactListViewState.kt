@@ -5,7 +5,7 @@ import com.vincent.network.models.Fact
 
 internal sealed class FactListViewState : BaseViewState() {
 
-    object LoadingState : BaseViewState.LoadingState()
-    data class ContentState(val facts: List<Fact>) : BaseViewState.ContentState()
-    data class ErrorState(val message: String) : BaseViewState.ErrorState()
+    object LoadingState : FactListViewState()
+    data class ContentState(val facts: List<Fact>) : FactListViewState()
+    data class ErrorState(val message: String) : FactListViewState()
 }

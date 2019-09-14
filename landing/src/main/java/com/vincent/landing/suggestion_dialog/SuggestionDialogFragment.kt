@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 @ExperimentalCoroutinesApi
 class SuggestionDialogFragment : BaseDialogFragment(R.layout.fragment_suggestion, suggestionModule) {
 
-    override val viewModel: SuggestionViewModel by viewModel()
+    val viewModel: SuggestionViewModel by viewModel()
 
     override fun onViewStateReceived(viewState: BaseViewState) {
         when (viewState) {

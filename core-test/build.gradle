@@ -11,9 +11,6 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
@@ -36,8 +33,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':core')
-    implementation project(':domain')
-    implementation project(':network')
 
-    testImplementation project(':core-test')
+    api 'junit:junit:4.12'
+    api "io.mockk:mockk:1.9.3"
+    api 'androidx.test.ext:junit:1.1.1'
+    api 'androidx.test.espresso:espresso-core:3.2.0'
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.0'
 }

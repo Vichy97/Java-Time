@@ -1,35 +1,61 @@
 package com.vincent.landing.fact_list
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
+import com.jakewharton.rxbinding3.view.clicks
 
 import com.vincent.core.ui.BaseFragment
 import com.vincent.core.ui.BaseViewState
 import com.vincent.landing.R
-
-import kotlinx.android.synthetic.main.fragment_fact_list.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
+import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.android.ext.android.inject
 
-@ObsoleteCoroutinesApi
-@ExperimentalCoroutinesApi
+import kotlinx.android.synthetic.main.fragment_fact_list.*
+
 internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, factListModule) {
 
-    override val viewModel: FactListViewModel by viewModel()
+    private val viewModel: FactListViewModel by viewModel()
     private val factListAdapter: FactListAdapter by inject()
+
+    private lateinit var viewStateObservable: Observable<FactListViewState>
+    private lateinit var uiEventObservable: Observable<FactListUiEvent>
+
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupAdapter()
-        fab.setOnClickListener {
-            viewModel.onFloatingActionButtonClicked()
-        }
+
+        uiEventObservable = Observable.merge<FactListUiEvent>(
+            fab.clicks().map {FactListUiEvent.FloatingActionButtonClickedEvent},
+            fab.clicks().map {FactListUiEvent.FloatingActionButtonClickedEvent}
+        ).startWith(FactListUiEvent.OnViewStart)
+
+        viewStateObservable = viewModel.bind(uiEventObservable)
+
+        compositeDisposable.add(viewStateObservable
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                when (it) {
+                    is FactListViewState.LoadingState -> {
+
+                    }
+                    is FactListViewState.ContentState -> {
+
+                    }
+                    is FactListViewState.ErrorState -> {
+
+                    }
+                }
+            }
+        )
+
         super.onViewCreated(view, savedInstanceState)
     }
 

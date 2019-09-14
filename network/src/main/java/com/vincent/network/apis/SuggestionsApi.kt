@@ -1,13 +1,12 @@
 package com.vincent.network.apis
 
 import com.vincent.network.models.Suggestion
-import okhttp3.ResponseBody
-import retrofit2.Response
+import io.reactivex.Completable
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface SuggestionsApi {
 
     @POST("/suggestions")
-    suspend fun sendSuggestion(@Body suggestion: Suggestion)
+    fun sendSuggestion(@Body suggestion: Suggestion): Completable
 }

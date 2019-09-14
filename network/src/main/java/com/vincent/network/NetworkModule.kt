@@ -7,6 +7,7 @@ import com.vincent.network.interceptors.HeaderInterceptor
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 val networkModule = module {
@@ -24,6 +25,7 @@ val networkModule = module {
             .baseUrl(BuildConfig.API_BASE_URL)
             .client(get())
             .addConverterFactory(get<MoshiConverterFactory>())
+            .addCallAdapterFactory(get<RxJava2CallAdapterFactory>())
             .build()
     }
 
@@ -46,5 +48,9 @@ val networkModule = module {
 
     single {
         MoshiConverterFactory.create(get())
+    }
+
+    single {
+        RxJava2CallAdapterFactory.create()
     }
 }

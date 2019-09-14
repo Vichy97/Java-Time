@@ -1,53 +1,41 @@
 package com.vincent.landing.fact_list
 
 import android.os.Bundle
-import androidx.lifecycle.viewModelScope
 import com.vincent.core.ui.BaseViewModel
-import com.vincent.core.ui.NavigationEvent
 import com.vincent.core.utils.ResourceProvider
+import com.vincent.core.utils.RxProvider
+import com.vincent.domain.repository.Action
 import com.vincent.domain.repository.FactRepository
-import com.vincent.landing.R
-import com.vincent.network.models.Fact
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
+import com.vincent.domain.repository.Result
+import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
 
-@ExperimentalCoroutinesApi
 internal class FactListViewModel(
     resourceProvider: ResourceProvider,
-    private val factsApi: FactRepository
-) : BaseViewModel(resourceProvider) {
+    rxProvider: RxProvider,
+    factListNavigator: FactListNavigator,
+    private val factsRepository: FactRepository
+) : BaseViewModel<FactListNavigator>(resourceProvider, rxProvider, factListNavigator) {
+
+    private lateinit var viewStateObservable: Observable<FactListViewState>
+    private val initialState: FactListViewState = FactListViewState.LoadingState
 
     override fun start(args: Bundle?) {
-        getFacts()
+
     }
 
-    private fun getFacts() {
-        viewModelScope.launch {
-            viewStateChannel.send(FactListViewState.LoadingState)
-            try {
-                val facts = factsApi.getFacts()
-                onGetFactsSuccess(facts)
-            } catch (e: Exception) {
-                onGetFactsError(e)
+    fun bind(uiEvents: Observable<FactListUiEvent>): Observable<FactListViewState> {
+        return factsRepository.bind( uiEvents.map { Action() })
+            .scan(initialState) { state: FactListViewState, result: Result ->
+                when (result) {
+                    is Result.Success -> FactListViewState.ContentState(result.facts)
+                    is Result.Error -> FactListViewState.ErrorState("error")
+                    is Result.InProgress -> FactListViewState.LoadingState
+                }
             }
-        }
     }
 
-    private suspend fun onGetFactsSuccess(facts: List<Fact>) {
-        viewStateChannel.send(FactListViewState.ContentState(facts))
-    }
+    fun unBind() {
 
-    private suspend fun onGetFactsError(e: Exception) {
-        viewStateChannel.send(FactListViewState.ErrorState(e.message ?: "error fetching fact"))
-    }
-
-    fun onFloatingActionButtonClicked() {
-        viewModelScope.launch {
-            val navigationEvent = NavigationEvent.IdEvent(
-                R.id.action_factListFragment_to_suggestionDialogFragment,
-                null
-            )
-            navigationChannel.send(navigationEvent)
-        }
     }
 }

@@ -1,19 +1,16 @@
 package com.vincent.landing.suggestion_dialog
 
-import androidx.lifecycle.viewModelScope
 import com.vincent.core.ui.BaseViewModel
 import com.vincent.core.utils.ResourceProvider
+import com.vincent.core.utils.RxProvider
 import com.vincent.domain.repository.SuggestionRepository
-import com.vincent.network.models.Suggestion
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-
-@ExperimentalCoroutinesApi
 class SuggestionViewModel(
     resourceProvider: ResourceProvider,
+    rxProvider: RxProvider,
+    navigator: SuggestionNavigator,
     private val suggestionRepository: SuggestionRepository
-) : BaseViewModel(resourceProvider) {
+) : BaseViewModel<SuggestionNavigator>(resourceProvider, rxProvider, navigator) {
 
     private var email: String = ""
     private var name: String = ""
@@ -43,19 +40,6 @@ class SuggestionViewModel(
         if (email.isNotEmpty()) {
             TODO("validate email")
             return
-        }
-        submitSuggestion()
-    }
-
-    private fun submitSuggestion() {
-        val suggestion = Suggestion(name, email, suggestion)
-        viewModelScope.launch {
-            try {
-                suggestionRepository.addSuggestion(suggestion)
-                viewStateChannel.send(SuggestionViewState.ContentState(true))
-            } catch (e: Exception) {
-
-            }
         }
     }
 }

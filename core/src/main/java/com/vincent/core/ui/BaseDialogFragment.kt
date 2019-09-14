@@ -10,26 +10,17 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.consumeEach
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
 
-@ObsoleteCoroutinesApi
-@ExperimentalCoroutinesApi
 abstract class BaseDialogFragment(
     @LayoutRes private val layoutId: Int,
     private val module: Module
 ) : DialogFragment() {
 
-    protected abstract val viewModel: BaseViewModel
-
     private lateinit var navController: NavController
     private var toast: Toast? = null
-
-    private val uiJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + uiJob)
 
     init {
         loadKoinModules(module)
@@ -50,28 +41,12 @@ abstract class BaseDialogFragment(
 
         navController = findNavController()
 
-        uiJob.start()
-        viewModel.start(arguments)
-
         subscribeToViewModel()
     }
 
     @CallSuper
     protected open fun subscribeToViewModel() {
-        uiScope.launch {
-            viewModel.viewStateChannel.openSubscription()
-                .consumeEach {
-                    onViewStateReceived(it)
-                }
-            viewModel.toastChannel.openSubscription()
-                .consumeEach {
-                    onToastReceived(it)
-                }
-            viewModel.navigationChannel.openSubscription()
-                .consumeEach {
-                    onNavigationEventReceived(it)
-                }
-        }
+
     }
 
     abstract fun onViewStateReceived(viewState: BaseViewState)
@@ -91,7 +66,6 @@ abstract class BaseDialogFragment(
     override fun onDestroy() {
         super.onDestroy()
 
-        uiJob.cancel()
         toast?.cancel()
 
         unloadKoinModules(module)
