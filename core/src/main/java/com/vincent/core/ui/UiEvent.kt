@@ -1,3 +1,3 @@
 package com.vincent.core.ui
 
-abstract class BaseUiEvent
+abstract class UiEvent

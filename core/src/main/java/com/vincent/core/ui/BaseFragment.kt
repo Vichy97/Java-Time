@@ -9,6 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
@@ -18,7 +19,9 @@ abstract class BaseFragment (
     private val module: Module
 ) : Fragment(layoutId) {
 
-    private lateinit var navController: NavController
+    protected lateinit var navController: NavController
+    protected val compositeDisposable = CompositeDisposable()
+
     private var toast: Toast? = null
 
     init {
@@ -29,27 +32,11 @@ abstract class BaseFragment (
         super.onViewCreated(view, savedInstanceState)
 
         navController = findNavController()
-
-        subscribeToViewModel()
     }
-
-    @CallSuper
-    protected open fun subscribeToViewModel() {
-
-    }
-
-    abstract fun onViewStateReceived(viewState: BaseViewState)
 
     private fun onToastReceived(message: String) {
         toast = Toast.makeText(context, message, LENGTH_SHORT)
         toast!!.show()
-    }
-
-    private fun onNavigationEventReceived(event: NavigationEvent) {
-        when (event) {
-            is NavigationEvent.UriEvent -> navController.navigate(event.uri)
-            is NavigationEvent.IdEvent -> navController.navigate(event.id, event.args)
-        }
     }
 
     @CallSuper
@@ -57,6 +44,7 @@ abstract class BaseFragment (
         super.onDestroy()
 
         toast?.cancel()
+        compositeDisposable.clear() //TODO: maybe put this in onStop or onPause?
 
         unloadKoinModules(module)
     }

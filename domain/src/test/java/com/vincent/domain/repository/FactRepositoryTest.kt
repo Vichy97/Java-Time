@@ -1,5 +1,6 @@
 package com.vincent.domain.repository
 
+import com.vincent.domain.repository.facts.FactRepository
 import com.vincent.network.apis.FactsApi
 import io.mockk.coEvery
 import io.mockk.coVerify

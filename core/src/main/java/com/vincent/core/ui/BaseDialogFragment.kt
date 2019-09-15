@@ -49,18 +49,11 @@ abstract class BaseDialogFragment(
 
     }
 
-    abstract fun onViewStateReceived(viewState: BaseViewState)
+    abstract fun onViewStateReceived(viewState: ViewState)
 
     private fun onToastReceived(message: String) {
         toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
         toast!!.show()
-    }
-
-    private fun onNavigationEventReceived(event: NavigationEvent) {
-        when (event) {
-            is NavigationEvent.UriEvent -> navController.navigate(event.uri)
-            is NavigationEvent.IdEvent -> navController.navigate(event.id, event.args)
-        }
     }
 
     override fun onDestroy() {

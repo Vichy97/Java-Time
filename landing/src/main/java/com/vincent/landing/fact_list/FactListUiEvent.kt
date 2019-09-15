@@ -1,10 +1,9 @@
 package com.vincent.landing.fact_list
 
-import com.vincent.core.ui.BaseUiEvent
+import com.vincent.core.ui.UiEvent
 
-sealed class FactListUiEvent : BaseUiEvent() {
+internal sealed class FactListUiEvent : UiEvent() {
 
-    object FloatingActionButtonClickedEvent : FactListUiEvent()
-
+    object FloatingActionButtonClicked : FactListUiEvent()
     object OnViewStart : FactListUiEvent()
 }

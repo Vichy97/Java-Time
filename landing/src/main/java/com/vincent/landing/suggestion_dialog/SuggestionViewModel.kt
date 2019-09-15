@@ -3,7 +3,7 @@ package com.vincent.landing.suggestion_dialog
 import com.vincent.core.ui.BaseViewModel
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.core.utils.RxProvider
-import com.vincent.domain.repository.SuggestionRepository
+import com.vincent.domain.repository.suggestions.SuggestionRepository
 
 class SuggestionViewModel(
     resourceProvider: ResourceProvider,

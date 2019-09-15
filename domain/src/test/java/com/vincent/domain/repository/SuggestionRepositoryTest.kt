@@ -1,5 +1,6 @@
 package com.vincent.domain.repository
 
+import com.vincent.domain.repository.suggestions.SuggestionRepository
 import com.vincent.network.apis.SuggestionsApi
 import com.vincent.network.models.Suggestion
 import io.mockk.*
@@ -14,7 +15,8 @@ class SuggestionRepositoryTest {
 
     @Before
     fun setup() {
-        suggestionsRepository = SuggestionRepository(suggestionsApi)
+        suggestionsRepository =
+            SuggestionRepository(suggestionsApi)
     }
 
     @Test

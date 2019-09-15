@@ -1,7 +1,7 @@
 package com.vincent.landing.suggestion_dialog
 
 import com.vincent.core.ui.BaseDialogFragment
-import com.vincent.core.ui.BaseViewState
+import com.vincent.core.ui.ViewState
 import com.vincent.landing.R
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,7 +15,7 @@ class SuggestionDialogFragment : BaseDialogFragment(R.layout.fragment_suggestion
 
     val viewModel: SuggestionViewModel by viewModel()
 
-    override fun onViewStateReceived(viewState: BaseViewState) {
+    override fun onViewStateReceived(viewState: ViewState) {
         when (viewState) {
             is SuggestionViewState.LoadingState -> renderLoadingState()
             is SuggestionViewState.ContentState -> renderContentState(viewState)

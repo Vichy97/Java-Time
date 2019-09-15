@@ -1,4 +1,4 @@
-package com.vincent.domain.repository
+package com.vincent.domain.repository.suggestions
 
 import com.vincent.network.apis.SuggestionsApi
 import com.vincent.network.models.Suggestion
