@@ -7,10 +7,10 @@ import org.koin.dsl.module
 val repositoryModule = module {
 
     single {
-        FactRepository(get())
+        FactRepository(get(), get())
     }
 
     single {
-        SuggestionRepository(get())
+        SuggestionRepository(get(), get())
     }
 }

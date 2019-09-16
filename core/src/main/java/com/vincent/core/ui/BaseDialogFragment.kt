@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
@@ -19,7 +20,9 @@ abstract class BaseDialogFragment(
     private val module: Module
 ) : DialogFragment() {
 
-    private lateinit var navController: NavController
+    protected lateinit var navController: NavController
+    protected val compositeDisposable = CompositeDisposable()
+
     private var toast: Toast? = null
 
     init {
@@ -40,16 +43,7 @@ abstract class BaseDialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         navController = findNavController()
-
-        subscribeToViewModel()
     }
-
-    @CallSuper
-    protected open fun subscribeToViewModel() {
-
-    }
-
-    abstract fun onViewStateReceived(viewState: ViewState)
 
     private fun onToastReceived(message: String) {
         toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
@@ -60,6 +54,7 @@ abstract class BaseDialogFragment(
         super.onDestroy()
 
         toast?.cancel()
+        compositeDisposable.clear()
 
         unloadKoinModules(module)
     }

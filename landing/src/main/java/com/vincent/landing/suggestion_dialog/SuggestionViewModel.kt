@@ -8,38 +8,10 @@ import com.vincent.domain.repository.suggestions.SuggestionRepository
 class SuggestionViewModel(
     resourceProvider: ResourceProvider,
     rxProvider: RxProvider,
-    navigator: SuggestionNavigator,
     private val suggestionRepository: SuggestionRepository
-) : BaseViewModel<SuggestionNavigator>(resourceProvider, rxProvider, navigator) {
+) : BaseViewModel(resourceProvider, rxProvider) {
 
     private var email: String = ""
     private var name: String = ""
     private var suggestion: String = ""
-
-    fun onEmailTextChanged(text: String) {
-
-    }
-
-    fun onBodyTextChanged(text: String) {
-
-    }
-
-    fun onNameTextChanged(text: String) {
-
-    }
-
-    fun onCancelClicked() {
-
-    }
-
-    fun onSendClicked() {
-        if (suggestion.isBlank()) {
-            TODO("send error state")
-            return
-        }
-        if (email.isNotEmpty()) {
-            TODO("validate email")
-            return
-        }
-    }
 }

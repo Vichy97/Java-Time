@@ -6,14 +6,10 @@ import org.koin.dsl.module
 internal val factListModule = module {
 
     viewModel {
-        FactListViewModel(get(), get(), get(), get())
+        FactListViewModel(get(), get(), get())
     }
 
     factory {
         FactListAdapter()
-    }
-
-    factory {
-        FactListNavigator(get())
     }
 }

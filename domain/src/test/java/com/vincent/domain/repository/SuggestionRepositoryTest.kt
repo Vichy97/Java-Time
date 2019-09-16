@@ -1,38 +1,71 @@
 package com.vincent.domain.repository
 
+import com.vincent.core_test.BaseTest
+import com.vincent.domain.repository.base.Result
+import com.vincent.domain.repository.suggestions.SuggestionAction
 import com.vincent.domain.repository.suggestions.SuggestionRepository
+import com.vincent.domain.repository.suggestions.SuggestionResult
 import com.vincent.network.apis.SuggestionsApi
 import com.vincent.network.models.Suggestion
+
 import io.mockk.*
-import kotlinx.coroutines.runBlocking
+
+import io.reactivex.Completable
+import io.reactivex.Observable
+
 import org.junit.Before
 import org.junit.Test
 
-class SuggestionRepositoryTest {
+class SuggestionRepositoryTest : BaseTest() {
 
     private val suggestionsApi = mockk<SuggestionsApi>(relaxed = true)
     private lateinit var suggestionsRepository: SuggestionRepository
 
+    private val suggestion = Suggestion("testName", "testEmail", "testBody")
+
     @Before
-    fun setup() {
-        suggestionsRepository =
-            SuggestionRepository(suggestionsApi)
+    override fun setup() {
+        super.setup()
+        suggestionsRepository = SuggestionRepository(rxProvider, suggestionsApi)
     }
 
     @Test
     fun should_makeApiCall_when_addingSuggestion() {
-        val suggestion = Suggestion("name", "email", "body")
+        val actions = Observable.just(SuggestionAction.AddSuggestion(suggestion))
 
-        runBlocking { suggestionsRepository.addSuggestion(suggestion) }
+        actions.compose(suggestionsRepository.addSuggestion)
+            .test()
+            .dispose()
 
-        coVerify { suggestionsApi.sendSuggestion(suggestion) }
+        verify { suggestionsApi.sendSuggestion(suggestion) }
     }
 
-    @Test(expected = Exception::class)
-    fun should_throwException_when_apiCallFails() {
-        val suggestion = Suggestion("name", "email", "body")
-        coEvery { suggestionsApi.sendSuggestion(any()) } throws Exception("test Exception")
+    @Test
+    fun should_emitError_when_apiCallFails() {
+        val actions = Observable.just(SuggestionAction.AddSuggestion(suggestion))
+        val exception = Exception("test")
+        every { suggestionsApi.sendSuggestion(any()) } returns Completable.error(exception)
 
-        runBlocking { suggestionsRepository.addSuggestion(suggestion) }
+        actions.compose(suggestionsRepository.addSuggestion)
+            .test()
+            .assertValues(
+                Result.InProgress,
+                Result.Error(exception)
+            )
+            .dispose()
+    }
+
+    @Test
+    fun should_emitSuccess_when_apiCallSucceeds() {
+        val actions = Observable.just(SuggestionAction.AddSuggestion(suggestion))
+        every { suggestionsApi.sendSuggestion(any()) } returns Completable.complete()
+
+        actions.compose(suggestionsRepository.addSuggestion)
+            .test()
+            .assertValues(
+                Result.InProgress,
+                SuggestionResult.Success
+            )
+            .dispose()
     }
 }

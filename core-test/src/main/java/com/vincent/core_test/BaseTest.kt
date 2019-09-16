@@ -1,13 +1,12 @@
 package com.vincent.core_test
 
 import androidx.annotation.CallSuper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
 import org.junit.Before
 
-@ExperimentalCoroutinesApi
 abstract class BaseTest {
 
+    protected val rxProvider = TestRxProvider()
 
     @CallSuper
     @Before
@@ -18,5 +17,6 @@ abstract class BaseTest {
     @CallSuper
     @After
     open fun tearDown() {
+
     }
 }

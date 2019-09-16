@@ -8,5 +8,6 @@ internal sealed class FactListViewState : ViewState() {
     object LoadingState : FactListViewState()
     data class ContentState(val facts: List<Fact>) : FactListViewState()
     data class ErrorState(val message: String) : FactListViewState()
+
     object NavigateToSuggestions : FactListViewState()
 }

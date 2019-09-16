@@ -10,8 +10,7 @@ import com.vincent.core.ui.BaseFragment
 import com.vincent.core.ui.ViewState
 import com.vincent.landing.R
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.exceptions.OnErrorNotImplementedException
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.android.ext.android.inject
@@ -48,11 +47,11 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
     private fun subscribeToViewModel() {
         val disposable = uiEventObservable
             .compose(viewModel.viewState)
-            .subscribeOn(Schedulers.io()) //TODO: maybe move this somewhere else
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .subscribe ({
                 onViewStateReceived(it)
-            }
+            }, { t ->
+                throw OnErrorNotImplementedException(t)
+            })
         compositeDisposable.add(disposable)
     }
 

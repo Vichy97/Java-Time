@@ -1,12 +1,23 @@
 package com.vincent.domain.repository.suggestions
 
+import com.vincent.core.utils.RxProvider
+import com.vincent.domain.repository.base.Result
 import com.vincent.network.apis.SuggestionsApi
-import com.vincent.network.models.Suggestion
-import io.reactivex.Completable
+import io.reactivex.Observable
 
-class SuggestionRepository(private val suggestionsApi: SuggestionsApi) {
+import io.reactivex.ObservableTransformer
 
-    fun addSuggestion(suggestion: Suggestion): Completable {
-        return suggestionsApi.sendSuggestion(suggestion)
+class SuggestionRepository(private val rxProvider: RxProvider,
+                           private val suggestionsApi: SuggestionsApi) {
+
+    val addSuggestion = ObservableTransformer<SuggestionAction.AddSuggestion, Result> { actions ->
+        actions.flatMap {
+            suggestionsApi.sendSuggestion(it.suggestion)
+                .andThen(Observable.just(SuggestionResult.Success as Result))
+                .onErrorReturn { throwable ->  Result.Error(throwable) }
+                .subscribeOn(rxProvider.getIoScheduler())
+                .observeOn(rxProvider.getUiScheduler())
+                .startWith(Result.InProgress)
+        }
     }
 }

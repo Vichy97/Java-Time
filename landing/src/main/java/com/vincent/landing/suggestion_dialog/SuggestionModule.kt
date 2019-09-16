@@ -6,10 +6,6 @@ import org.koin.dsl.module
 val suggestionModule = module {
 
     viewModel {
-        SuggestionViewModel(get(), get(), get(), get())
-    }
-
-    factory {
-        SuggestionNavigator(get())
+        SuggestionViewModel(get(), get(), get())
     }
 }

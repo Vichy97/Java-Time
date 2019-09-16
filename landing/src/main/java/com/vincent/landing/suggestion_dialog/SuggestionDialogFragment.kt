@@ -4,18 +4,13 @@ import com.vincent.core.ui.BaseDialogFragment
 import com.vincent.core.ui.ViewState
 import com.vincent.landing.R
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@ObsoleteCoroutinesApi
-@ExperimentalCoroutinesApi
 class SuggestionDialogFragment : BaseDialogFragment(R.layout.fragment_suggestion, suggestionModule) {
 
     val viewModel: SuggestionViewModel by viewModel()
 
-    override fun onViewStateReceived(viewState: ViewState) {
+    private fun onViewStateReceived(viewState: ViewState) {
         when (viewState) {
             is SuggestionViewState.LoadingState -> renderLoadingState()
             is SuggestionViewState.ContentState -> renderContentState(viewState)
