@@ -1,19 +1,21 @@
 package com.vincent.core.utils
 
+import android.content.res.Resources
+
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val utilsModule = module {
 
-    single {
+    single<RxProvider> {
         RxProvider()
     }
 
-    single {
-        ResourceProvider(get())
+    single<ResourceProvider> {
+        ResourceProvider(get<Resources>())
     }
 
-    single {
+    single<Resources> {
         androidContext().resources
     }
 }

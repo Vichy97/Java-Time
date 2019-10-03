@@ -6,13 +6,13 @@ import org.koin.dsl.module
 
 val moshiModule = module {
 
-    single {
+    single<Moshi> {
         Moshi.Builder()
             .add(get<KotlinJsonAdapterFactory>())
             .build()
     }
 
-    single {
+    single<KotlinJsonAdapterFactory> {
         KotlinJsonAdapterFactory()
     }
 }

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Button.Primary" parent="TextAppearance.MaterialComponents.Button">
         <item name="backgroundTint">@color/secondary_color</item>
         <item name="rippleColor">@color/secondary_dark_color</item>
+        <item name="android:padding">@dimen/double_spacing</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="strokeColor">@color/secondary_color</item>
-        <item name="rippleColor">@color/secondary_dark_color</item>
+        <item name="rippleColor">@color/secondary_color</item>
+        <item name="android:padding">@dimen/double_spacing</item>
+        <item name="android:textColor">@color/on_surface_color</item>
     </style>
 </resources>

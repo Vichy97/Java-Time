@@ -1,16 +1,16 @@
 package com.vincent.domain.repository
 
-import com.vincent.domain.repository.facts.FactRepository
-import com.vincent.domain.repository.suggestions.SuggestionRepository
+import com.vincent.network.apis.FactsApi
+import com.vincent.network.apis.SuggestionsApi
 import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    single {
-        FactRepository(get(), get())
+    single<FactRepository> {
+        FactRepository(get<FactsApi>())
     }
 
-    single {
-        SuggestionRepository(get(), get())
+    single<SuggestionRepository> {
+        SuggestionRepository(get<SuggestionsApi>())
     }
 }

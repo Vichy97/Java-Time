@@ -1,3 +1,3 @@
 package com.vincent.core.ui
 
-abstract class UiEvent
+abstract class BaseViewState

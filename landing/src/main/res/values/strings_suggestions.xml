@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_suggestion_header">
+        Have a fact of your own or a suggestionRequest on how to improve the app? Send it to us here!
+    </string>
+    <string name="dialog_suggestion_name_hint">Name (optional)</string>
+    <string name="dialog_suggestion_email_hint">Email (optional)</string>
+    <string name="dialog_suggestion_suggestion_hint">Suggestion</string>
+    <string name="dialog_suggestion_send_button_text">Send</string>
+    <string name="dialog_suggestion_cancel_button_text">Cancel</string>
+    <string name="dialog_suggestion_suggestion_empty_error">Suggestion cannot be empty.</string>
+</resources>

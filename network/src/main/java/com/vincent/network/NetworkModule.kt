@@ -1,26 +1,30 @@
 package com.vincent.network
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.squareup.moshi.Moshi
 import com.vincent.network.apis.FactsApi
 import com.vincent.network.apis.SuggestionsApi
 import com.vincent.network.interceptors.HeaderInterceptor
+
 import okhttp3.OkHttpClient
+
 import org.koin.dsl.module
+
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 val networkModule = module {
 
-    single {
+    single<FactsApi> {
         get<Retrofit>().create(FactsApi::class.java)
     }
 
-    single {
+    single<SuggestionsApi> {
         get<Retrofit>().create(SuggestionsApi::class.java)
     }
 
-    single {
+    single<Retrofit> {
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_BASE_URL)
             .client(get())
@@ -29,28 +33,28 @@ val networkModule = module {
             .build()
     }
 
-    single {
+    single<OkHttpClient> {
         OkHttpClient.Builder().apply {
-            addInterceptor(get<HeaderInterceptor>())
+            addNetworkInterceptor(get<HeaderInterceptor>())
             if (BuildConfig.DEBUG) {
-                addInterceptor(get<StethoInterceptor>())
+                addNetworkInterceptor(get<StethoInterceptor>())
             }
         }.build()
     }
 
-    single {
+    single<StethoInterceptor> {
         StethoInterceptor()
     }
 
-    single {
+    single<HeaderInterceptor> {
         HeaderInterceptor()
     }
 
-    single {
-        MoshiConverterFactory.create(get())
+    single<MoshiConverterFactory> {
+        MoshiConverterFactory.create(get<Moshi>())
     }
 
-    single {
+    single<RxJava2CallAdapterFactory> {
         RxJava2CallAdapterFactory.create()
     }
 }
