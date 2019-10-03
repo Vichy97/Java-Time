@@ -1,6 +1,6 @@
-package com.vincent.network.apis
+package com.vincent.network.api
 
-import com.vincent.network.models.SuggestionRequest
+import com.vincent.network.model.SuggestionRequest
 import io.reactivex.Completable
 import retrofit2.http.Body
 import retrofit2.http.POST

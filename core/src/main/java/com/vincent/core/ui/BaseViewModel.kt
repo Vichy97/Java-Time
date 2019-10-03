@@ -1,5 +1,6 @@
 package com.vincent.core.ui
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 
 import com.vincent.core.utils.RxProvider
@@ -22,13 +23,19 @@ abstract class BaseViewModel<VS : BaseViewState, N : BaseNavigator>(
     val snackbarEvents: Observable<String> = snackbarSubject
     val loadingEvents: Observable<Boolean> = loadingSubject
 
+    open fun start(arguments: Bundle?) { }
+
     override fun onCleared() {
         super.onCleared()
 
         compositeDisposable.dispose()
     }
 
-    fun addDisposable(disposable: Disposable) {
+    protected fun addDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)
+    }
+
+    protected fun addDisposables(vararg disposables: Disposable) {
+        compositeDisposable.addAll(*disposables)
     }
 }

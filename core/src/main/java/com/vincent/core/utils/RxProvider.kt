@@ -9,15 +9,15 @@ import io.reactivex.subjects.PublishSubject
 
 open class RxProvider {
 
-    open fun getUiScheduler(): Scheduler {
+    open fun uiScheduler(): Scheduler {
         return AndroidSchedulers.mainThread()
     }
 
-    open fun getIoScheduler(): Scheduler {
+    open fun ioScheduler(): Scheduler {
         return Schedulers.io()
     }
 
-    open fun getComputationScheduler(): Scheduler {
+    open fun computationScheduler(): Scheduler {
         return Schedulers.computation()
     }
 

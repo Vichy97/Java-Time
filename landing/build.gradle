@@ -37,7 +37,6 @@ dependencies {
 
     implementation project(':core')
     implementation project(':domain')
-    implementation project(':network')
 
     testImplementation project(':core-test')
 }

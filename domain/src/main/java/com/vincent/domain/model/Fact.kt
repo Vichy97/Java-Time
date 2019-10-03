@@ -1,6 +1,6 @@
 package com.vincent.domain.model
 
-import com.vincent.network.models.FactResponse
+import com.vincent.network.model.FactResponse
 
 data class Fact(
     val body: String = ""

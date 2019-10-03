@@ -2,9 +2,12 @@ package com.vincent.landing.fact_list
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 
 import com.vincent.core.ui.BaseFragment
 import com.vincent.landing.R
+
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.android.ext.android.inject
@@ -23,6 +26,39 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
     }
 
     private fun setupAdapter() {
-        rv_fact_list.adapter = factListAdapter
+        vp_fact_list.adapter = factListAdapter
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        subscribeToViewModel()
+        viewModel.start(arguments)
+    }
+
+    private fun subscribeToViewModel() {
+        val viewStateDisposable = viewModel.viewStateEvents
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { onViewStateReceived(it) }
+        val snackBarDisposable = viewModel.snackbarEvents
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { showSnackbar(it) }
+        val loadingDisposable = viewModel.loadingEvents
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { progress_bar.isVisible = it }
+        val navigationDisposable = viewModel.navigationEvents
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { navigate(it) }
+
+        addDisposables(
+            viewStateDisposable,
+            snackBarDisposable,
+            loadingDisposable,
+            navigationDisposable
+        )
+    }
+
+    private fun onViewStateReceived(viewState: FactListViewState) {
+        factListAdapter.setFacts(viewState.facts)
     }
 }

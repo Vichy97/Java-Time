@@ -26,8 +26,8 @@ abstract class BaseFragment(@LayoutRes layoutId: Int, private val module: Module
     }
 
     @CallSuper
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
 
         snackbar?.dismiss()
         compositeDisposable.clear()
@@ -61,5 +61,9 @@ abstract class BaseFragment(@LayoutRes layoutId: Int, private val module: Module
 
     protected fun addDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)
+    }
+
+    protected fun addDisposables(vararg disposables: Disposable) {
+        compositeDisposable.addAll(*disposables)
     }
 }

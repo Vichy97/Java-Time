@@ -2,9 +2,9 @@ package com.vincent.network
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.squareup.moshi.Moshi
-import com.vincent.network.apis.FactsApi
-import com.vincent.network.apis.SuggestionsApi
-import com.vincent.network.interceptors.HeaderInterceptor
+import com.vincent.network.api.FactsApi
+import com.vincent.network.api.SuggestionsApi
+import com.vincent.network.interceptor.HeaderInterceptor
 
 import okhttp3.OkHttpClient
 
@@ -13,6 +13,10 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+
+import java.util.concurrent.TimeUnit
+
+private const val CALL_TIMEOUT = 60L
 
 val networkModule = module {
 
@@ -27,7 +31,7 @@ val networkModule = module {
     single<Retrofit> {
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_BASE_URL)
-            .client(get())
+            .client(get<OkHttpClient>())
             .addConverterFactory(get<MoshiConverterFactory>())
             .addCallAdapterFactory(get<RxJava2CallAdapterFactory>())
             .build()
@@ -35,10 +39,9 @@ val networkModule = module {
 
     single<OkHttpClient> {
         OkHttpClient.Builder().apply {
+            callTimeout(CALL_TIMEOUT, TimeUnit.SECONDS)
             addNetworkInterceptor(get<HeaderInterceptor>())
-            if (BuildConfig.DEBUG) {
-                addNetworkInterceptor(get<StethoInterceptor>())
-            }
+            if (BuildConfig.DEBUG) { addNetworkInterceptor(get<StethoInterceptor>()) }
         }.build()
     }
 

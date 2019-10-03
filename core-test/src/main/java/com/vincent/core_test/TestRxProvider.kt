@@ -6,15 +6,15 @@ import io.reactivex.schedulers.Schedulers
 
 class TestRxProvider : RxProvider() {
 
-    override fun getUiScheduler(): Scheduler {
+    override fun uiScheduler(): Scheduler {
         return Schedulers.trampoline()
     }
 
-    override fun getIoScheduler(): Scheduler {
+    override fun ioScheduler(): Scheduler {
         return Schedulers.trampoline()
     }
 
-    override fun getComputationScheduler(): Scheduler {
+    override fun computationScheduler(): Scheduler {
         return Schedulers.trampoline()
     }
 }

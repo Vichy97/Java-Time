@@ -1,8 +1,8 @@
-package com.vincent.network.interceptors
+package com.vincent.network.interceptor
 
 import com.vincent.network.constants.MIME
 import com.vincent.network.constants.Header
-import com.vincent.network.utils.addHeader
+import com.vincent.network.util.addHeader
 
 import okhttp3.Interceptor
 import okhttp3.Response

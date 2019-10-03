@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/card_fact_height"
-    android:layout_gravity="center"
-    app:cardBackgroundColor="@color/primary_light_color"
-    app:cardCornerRadius="@dimen/corner_radius"
-    app:cardElevation="@dimen/elevation"
-    app:cardUseCompatPadding="true">
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_fact"
-        style="@style/TextAppearance.MaterialComponents.Headline5"
+        style="@style/TextAppearance.MaterialComponents.Headline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/double_spacing"
         android:gravity="center"
-        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Coffee is the world's second most traded commodity. Crude oil is the first." />
-</com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

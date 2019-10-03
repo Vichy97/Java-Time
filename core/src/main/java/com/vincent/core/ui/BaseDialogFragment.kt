@@ -55,8 +55,8 @@ abstract class BaseDialogFragment(
     }
 
     @CallSuper
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
 
         snackbar?.dismiss()
         compositeDisposable.clear()
@@ -90,5 +90,9 @@ abstract class BaseDialogFragment(
 
     protected fun addDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)
+    }
+
+    protected fun addDisposables(vararg disposables: Disposable) {
+        compositeDisposable.addAll(*disposables)
     }
 }

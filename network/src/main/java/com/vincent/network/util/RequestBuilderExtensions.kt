@@ -1,4 +1,4 @@
-package com.vincent.network.utils
+package com.vincent.network.util
 
 import com.vincent.network.constants.MIME
 import com.vincent.network.constants.Header

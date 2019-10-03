@@ -17,6 +17,13 @@ import timber.log.Timber
 
 class Application : Application() {
 
+    private val modules = listOf(
+        utilsModule,
+        moshiModule,
+        networkModule,
+        repositoryModule
+    )
+
     override fun onCreate() {
         super.onCreate()
 
@@ -43,5 +50,3 @@ class Application : Application() {
         Stetho.initializeWithDefaults(this)
     }
 }
-
-private val modules = listOf(utilsModule, moshiModule, networkModule, repositoryModule)

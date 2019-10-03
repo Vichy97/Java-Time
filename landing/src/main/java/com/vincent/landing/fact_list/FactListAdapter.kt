@@ -2,14 +2,16 @@ package com.vincent.landing.fact_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+
 import androidx.recyclerview.widget.RecyclerView
 
+import com.vincent.domain.model.Fact
+
 import com.vincent.landing.R
-import com.vincent.network.models.FactResponse
 
 internal class FactListAdapter : RecyclerView.Adapter<FactViewHolder>() {
 
-    private val facts = mutableListOf<FactResponse>()
+    private val facts = mutableListOf<Fact>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FactViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -25,7 +27,7 @@ internal class FactListAdapter : RecyclerView.Adapter<FactViewHolder>() {
         return facts.size
     }
 
-    fun setFacts(facts: List<FactResponse>) {
+    fun setFacts(facts: List<Fact>) {
         this.facts.clear()
         this.facts.addAll(facts)
         notifyDataSetChanged()

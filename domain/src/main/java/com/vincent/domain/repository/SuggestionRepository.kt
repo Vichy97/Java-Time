@@ -1,8 +1,8 @@
 package com.vincent.domain.repository
 
 import com.vincent.domain.model.Suggestion
-import com.vincent.network.apis.SuggestionsApi
-import com.vincent.network.models.SuggestionRequest
+import com.vincent.network.api.SuggestionsApi
+import com.vincent.network.model.SuggestionRequest
 
 import io.reactivex.Completable
 

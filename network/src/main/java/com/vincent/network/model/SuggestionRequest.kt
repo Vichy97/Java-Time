@@ -1,7 +1,9 @@
-package com.vincent.network.models
+package com.vincent.network.model
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class SuggestionRequest(
     @Json(name = "name") val name: String = "",
     @Json(name = "email") val email: String = "",

@@ -1,7 +1,7 @@
 package com.vincent.domain.repository
 
 import com.vincent.domain.model.Fact
-import com.vincent.network.apis.FactsApi
+import com.vincent.network.api.FactsApi
 
 import io.reactivex.Single
 
