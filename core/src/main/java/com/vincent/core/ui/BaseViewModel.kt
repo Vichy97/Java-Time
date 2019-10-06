@@ -23,7 +23,7 @@ abstract class BaseViewModel<VS : BaseViewState, N : BaseNavigator>(
     val snackbarEvents: Observable<String> = snackbarSubject
     val loadingEvents: Observable<Boolean> = loadingSubject
 
-    open fun start(arguments: Bundle?) { }
+    open fun start(arguments: Bundle? = null) { }
 
     override fun onCleared() {
         super.onCleared()

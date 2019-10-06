@@ -42,7 +42,7 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
         super.onStart()
 
         subscribeToViewModel()
-        viewModel.start(arguments)
+        viewModel.start()
     }
 
     private fun subscribeToViewModel() {
