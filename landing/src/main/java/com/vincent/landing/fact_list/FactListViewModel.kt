@@ -20,7 +20,6 @@ internal class FactListViewModel(
 ) : BaseViewModel<FactListViewState, FactListNavigator>(rxProvider, navigator) {
 
     override fun start(arguments: Bundle?) {
-
         getFacts()
     }
 
@@ -54,6 +53,11 @@ internal class FactListViewModel(
         }
 
         snackbarSubject.onNext(error)
+    }
+
+    fun onSwipeToRefresh() {
+
+        getFacts()
     }
 
     fun onFloatingActionButtonClicked() {

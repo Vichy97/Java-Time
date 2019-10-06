@@ -2,7 +2,6 @@ package com.vincent.landing.fact_list
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 
 import com.vincent.core.ui.BaseFragment
 import com.vincent.landing.R
@@ -29,6 +28,9 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
     private fun setupViewEvents() {
         fab.setOnClickListener {
             viewModel.onFloatingActionButtonClicked()
+        }
+        swipe_container.setOnRefreshListener {
+            viewModel.onSwipeToRefresh()
         }
     }
 
@@ -70,7 +72,7 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
     }
 
     private fun showLoading(loading: Boolean) {
-        progress_bar.isVisible = loading
+        swipe_container.isRefreshing = loading
         view?.isClickable = !loading
     }
 }
