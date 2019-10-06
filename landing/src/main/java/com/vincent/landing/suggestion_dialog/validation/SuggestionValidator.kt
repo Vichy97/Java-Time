@@ -1,6 +1,7 @@
 package com.vincent.landing.suggestion_dialog.validation
 
 import android.util.Patterns
+import androidx.core.util.PatternsCompat
 
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.landing.R
@@ -11,7 +12,7 @@ internal class SuggestionValidator(private val resourceProvider: ResourceProvide
         if (email.isEmpty()) {
             return ""
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()) {
             return resourceProvider.getString(R.string.error_invalid_email)
         }
         return ""
