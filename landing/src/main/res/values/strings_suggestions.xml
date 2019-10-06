@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="dialog_suggestion_header">
-        Have a fact of your own or a suggestionRequest on how to improve the app? Send it to us here!
+        Have a fact of your own or a suggestion on how to improve the app? Send it to us here!
     </string>
     <string name="dialog_suggestion_name_hint">Name (optional)</string>
     <string name="dialog_suggestion_email_hint">Email (optional)</string>

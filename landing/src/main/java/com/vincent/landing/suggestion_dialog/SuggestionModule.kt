@@ -13,9 +13,10 @@ internal val suggestionModule = module {
     viewModel<SuggestionViewModel> {
         SuggestionViewModel(
             get<RxProvider>(),
+            get<SuggestionNavigator>(),
+            get<ResourceProvider>(),
             get<SuggestionRepository>(),
-            get<SuggestionValidator>(),
-            get<SuggestionNavigator>()
+            get<SuggestionValidator>()
         )
     }
 

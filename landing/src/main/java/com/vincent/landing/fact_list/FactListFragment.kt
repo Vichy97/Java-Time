@@ -21,8 +21,15 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupAdapter()
+        setupViewEvents()
 
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun setupViewEvents() {
+        fab.setOnClickListener {
+            viewModel.onFloatingActionButtonClicked()
+        }
     }
 
     private fun setupAdapter() {
@@ -45,7 +52,7 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
             .subscribe { showSnackbar(it) }
         val loadingDisposable = viewModel.loadingEvents
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { progress_bar.isVisible = it }
+            .subscribe { showLoading(it) }
         val navigationDisposable = viewModel.navigationEvents
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { navigate(it) }
@@ -60,5 +67,10 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
 
     private fun onViewStateReceived(viewState: FactListViewState) {
         factListAdapter.setFacts(viewState.facts)
+    }
+
+    private fun showLoading(loading: Boolean) {
+        progress_bar.isVisible = loading
+        view?.isClickable = !loading
     }
 }

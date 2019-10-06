@@ -7,7 +7,7 @@ import com.vincent.landing.R
 
 internal class SuggestionValidator(private val resourceProvider: ResourceProvider) {
 
-    private fun validateEmail(email: String): String {
+    fun validateEmail(email: String): String {
         if (email.isEmpty()) {
             return ""
         }
@@ -17,7 +17,7 @@ internal class SuggestionValidator(private val resourceProvider: ResourceProvide
         return ""
     }
 
-    private fun validateSuggestion(suggestion: String): String {
+    fun validateSuggestion(suggestion: String): String {
         if (suggestion.isBlank()) {
             return resourceProvider.getString(R.string.dialog_suggestion_suggestion_empty_error)
         }

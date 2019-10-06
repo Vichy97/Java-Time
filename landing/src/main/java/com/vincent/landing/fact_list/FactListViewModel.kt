@@ -1,12 +1,14 @@
 package com.vincent.landing.fact_list
 
 import android.os.Bundle
+
 import com.vincent.core.ui.BaseViewModel
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.core.utils.RxProvider
 import com.vincent.domain.model.Fact
 import com.vincent.domain.repository.FactRepository
 import com.vincent.landing.R
+
 import timber.log.Timber
 import java.net.SocketTimeoutException
 
@@ -52,5 +54,9 @@ internal class FactListViewModel(
         }
 
         snackbarSubject.onNext(error)
+    }
+
+    fun onFloatingActionButtonClicked() {
+        navigator.showSuggestionDialog()
     }
 }
