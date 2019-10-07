@@ -1,5 +1,6 @@
 package com.vincent.landing.suggestion_dialog
 
+import com.vincent.core.analytics.AnalyticsService
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.core.utils.RxProvider
 import com.vincent.domain.repository.SuggestionRepository
@@ -15,6 +16,7 @@ internal val suggestionModule = module {
             get<RxProvider>(),
             get<SuggestionNavigator>(),
             get<ResourceProvider>(),
+            get<AnalyticsService>(),
             get<SuggestionRepository>(),
             get<SuggestionValidator>()
         )

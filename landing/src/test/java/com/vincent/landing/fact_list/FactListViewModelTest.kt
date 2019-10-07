@@ -1,20 +1,25 @@
 package com.vincent.landing.fact_list
 
+import com.vincent.core.analytics.AnalyticsService
+import com.vincent.core.analytics.Page
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.core_test.BaseTest
 import com.vincent.domain.model.Fact
 import com.vincent.domain.repository.FactRepository
+
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
+
 import org.junit.Test
 
 class FactListViewModelTest : BaseTest() {
 
     private val navigator = mockk<FactListNavigator>(relaxed = true)
     private val resourceProvider = mockk<ResourceProvider>(relaxed = true)
+    private val analyticsService = mockk<AnalyticsService>(relaxed = true)
     private val factRepository = mockk<FactRepository>(relaxed = true)
     private lateinit var viewModel: FactListViewModel
     private lateinit var viewStateObserver: TestObserver<FactListViewState>
@@ -24,10 +29,23 @@ class FactListViewModelTest : BaseTest() {
     override fun setup() {
         super.setup()
 
-        viewModel = FactListViewModel(rxProvider, navigator, resourceProvider, factRepository)
+        viewModel = FactListViewModel(
+            rxProvider,
+            navigator,
+            resourceProvider,
+            analyticsService,
+            factRepository
+        )
         viewStateObserver = viewModel.viewStateEvents.test()
         loadingObserver = viewModel.loadingEvents.test()
         snackbarObserver = viewModel.snackbarEvents.test()
+    }
+
+    @Test
+    fun should_sendPageViewEvent_when_viewModelStarts() {
+        viewModel.start()
+
+        verify { analyticsService.trackPage(Page.FACT_LIST) }
     }
 
     @Test

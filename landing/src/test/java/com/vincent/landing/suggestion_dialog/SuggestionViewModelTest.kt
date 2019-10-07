@@ -1,20 +1,25 @@
 package com.vincent.landing.suggestion_dialog
 
+import com.vincent.core.analytics.AnalyticsService
+import com.vincent.core.analytics.Page
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.core_test.BaseTest
 import com.vincent.domain.repository.SuggestionRepository
 import com.vincent.landing.suggestion_dialog.validation.SuggestionValidator
+
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.reactivex.Completable
-import io.reactivex.Single
 import io.reactivex.observers.TestObserver
+
 import org.junit.Test
 
 class SuggestionViewModelTest : BaseTest() {
 
     private val navigator = mockk<SuggestionNavigator>(relaxed = true)
     private val resourceProvider = mockk<ResourceProvider>(relaxed = true)
+    private val analyticsService = mockk<AnalyticsService>(relaxed = true)
     private val suggestionRepository = mockk<SuggestionRepository>(relaxed = true)
     private val suggestionValidator = mockk<SuggestionValidator>(relaxed = true)
 
@@ -30,6 +35,7 @@ class SuggestionViewModelTest : BaseTest() {
             rxProvider,
             navigator,
             resourceProvider,
+            analyticsService,
             suggestionRepository,
             suggestionValidator
         )
@@ -39,6 +45,13 @@ class SuggestionViewModelTest : BaseTest() {
         snackbarObserver = viewModel.snackbarEvents.test()
 
         every { suggestionValidator.validateEmail(any()) } returns ""
+    }
+
+    @Test
+    fun should_sendPageViewEvent_when_viewModelStarts() {
+        viewModel.start()
+
+        verify { analyticsService.trackPage(Page.SUGGESTION) }
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.vincent.landing.fact_list
 
+import com.vincent.core.analytics.AnalyticsService
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.core.utils.RxProvider
 import com.vincent.domain.repository.FactRepository
@@ -14,6 +15,7 @@ internal val factListModule = module {
             get<RxProvider>(),
             get<FactListNavigator>(),
             get<ResourceProvider>(),
+            get<AnalyticsService>(),
             get<FactRepository>()
         )
     }
