@@ -41,6 +41,7 @@ class SuggestionDialogFragment
         super.onStart()
 
         subscribeToViewModel()
+        viewModel.start()
     }
 
     private fun subscribeToViewModel() {

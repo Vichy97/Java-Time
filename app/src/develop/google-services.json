@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "340603088615",
+    "firebase_url": "https://java-time.firebaseio.com",
+    "project_id": "java-time",
+    "storage_bucket": "java-time.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340603088615:android:8be181a1a9eacc71747c42",
+        "android_client_info": {
+          "package_name": "com.vincent.javatime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340603088615-32ne0m8vlrrb3hm1hbnv22tsrcp623s2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq9DpnKz2DFvaFyjCNJSYCt9JLZSe57NM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340603088615-32ne0m8vlrrb3hm1hbnv22tsrcp623s2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340603088615:android:15b8f45081623cc4747c42",
+        "android_client_info": {
+          "package_name": "com.vincent.javatime.develop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340603088615-32ne0m8vlrrb3hm1hbnv22tsrcp623s2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq9DpnKz2DFvaFyjCNJSYCt9JLZSe57NM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340603088615-32ne0m8vlrrb3hm1hbnv22tsrcp623s2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

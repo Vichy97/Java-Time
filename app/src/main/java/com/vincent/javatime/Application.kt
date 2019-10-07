@@ -3,6 +3,8 @@ package com.vincent.javatime
 import android.app.Application
 
 import com.facebook.stetho.Stetho
+import com.vincent.core.analytics.analyticsModule
+import com.vincent.core.log.CrashlyticsTree
 
 import com.vincent.core.parsing.moshiModule
 import com.vincent.core.utils.utilsModule
@@ -21,7 +23,8 @@ class Application : Application() {
         utilsModule,
         moshiModule,
         networkModule,
-        repositoryModule
+        repositoryModule,
+        analyticsModule
     )
 
     override fun onCreate() {
@@ -35,6 +38,8 @@ class Application : Application() {
     private fun setupLogging() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        } else {
+            Timber.plant(CrashlyticsTree())
         }
     }
 
@@ -44,6 +49,7 @@ class Application : Application() {
             androidContext(this@Application)
             modules(modules)
         }
+
     }
 
     private fun setupStetho() {

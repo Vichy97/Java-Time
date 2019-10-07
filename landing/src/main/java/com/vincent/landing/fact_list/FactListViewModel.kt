@@ -1,6 +1,8 @@
 package com.vincent.landing.fact_list
 
 import android.os.Bundle
+import com.vincent.core.analytics.AnalyticsService
+import com.vincent.core.analytics.Page
 
 import com.vincent.core.ui.BaseViewModel
 import com.vincent.core.utils.ResourceProvider
@@ -16,11 +18,14 @@ internal class FactListViewModel(
     rxProvider: RxProvider,
     navigator: FactListNavigator,
     private val resourceProvider: ResourceProvider,
+    private val analyticsService: AnalyticsService,
     private val factsRepository: FactRepository
 ) : BaseViewModel<FactListViewState, FactListNavigator>(rxProvider, navigator) {
 
     override fun start(arguments: Bundle?) {
         getFacts()
+
+        analyticsService.trackPage(Page.FACT_LIST)
     }
 
     private fun getFacts() {

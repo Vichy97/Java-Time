@@ -1,5 +1,8 @@
 package com.vincent.landing.suggestion_dialog
 
+import android.os.Bundle
+import com.vincent.core.analytics.AnalyticsService
+import com.vincent.core.analytics.Page
 import com.vincent.core.ui.BaseViewModel
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.core.utils.RxProvider
@@ -14,6 +17,7 @@ internal class SuggestionViewModel(
     rxProvider: RxProvider,
     navigator: SuggestionNavigator,
     private val resourceProvider: ResourceProvider,
+    private val analyticsService: AnalyticsService,
     private val suggestionRepository: SuggestionRepository,
     private val suggestionValidator: SuggestionValidator
 ) : BaseViewModel<SuggestionViewState, SuggestionNavigator>(rxProvider, navigator) {
@@ -23,6 +27,10 @@ internal class SuggestionViewModel(
     private var name = ""
     private var email = ""
     private var suggestion = ""
+
+    override fun start(arguments: Bundle?) {
+        analyticsService.trackPage(Page.SUGGESTION)
+    }
 
     fun onNameTextChanged(text: String) {
         name = text

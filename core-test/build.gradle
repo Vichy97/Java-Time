@@ -19,6 +19,12 @@ android {
         }
     }
 
+    flavorDimensions "environment"
+    productFlavors {
+        develop {}
+        production {}
+    }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8

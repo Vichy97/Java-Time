@@ -1,6 +1,5 @@
 package com.vincent.landing.suggestion_dialog.validation
 
-import android.util.Patterns
 import androidx.core.util.PatternsCompat
 
 import com.vincent.core.utils.ResourceProvider

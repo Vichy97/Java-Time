@@ -21,11 +21,15 @@ android {
         all {
             minifyEnabled false
         }
-        release {
-            buildConfigField "String", "API_BASE_URL", "\"release_url\""
-        }
-        debug {
+    }
+
+    flavorDimensions "environment"
+    productFlavors {
+        develop {
             buildConfigField "String", "API_BASE_URL", "\"https://java-time.herokuapp.com\""
+        }
+        production {
+            buildConfigField "String", "API_BASE_URL", "\"release_url\""
         }
     }
 
