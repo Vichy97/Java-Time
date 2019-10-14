@@ -5,6 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+
 import com.google.android.material.snackbar.Snackbar
 
 import io.reactivex.disposables.CompositeDisposable
@@ -14,15 +15,17 @@ import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
 
-abstract class BaseFragment(@LayoutRes layoutId: Int, private val module: Module)
-    : Fragment(layoutId) {
+abstract class BaseFragment(
+    @LayoutRes layoutId: Int,
+    private val module: Module?
+) : Fragment(layoutId) {
 
     private val compositeDisposable = CompositeDisposable()
     private var snackbar: Snackbar? = null
     private val navController: NavController by lazy { findNavController() }
 
     init {
-        loadKoinModules(module)
+        module?.let { loadKoinModules(it) }
     }
 
     @CallSuper
@@ -38,11 +41,12 @@ abstract class BaseFragment(@LayoutRes layoutId: Int, private val module: Module
         super.onDestroyView()
 
         compositeDisposable.dispose()
-        unloadKoinModules(module)
+
+        module?.let { unloadKoinModules(it) }
     }
 
     protected fun navigate(navigationEvent: NavigationEvent) {
-        when(navigationEvent) {
+        when (navigationEvent) {
             is NavigationEvent.UriEvent -> {
                 navController.navigate(navigationEvent.uri)
             }
