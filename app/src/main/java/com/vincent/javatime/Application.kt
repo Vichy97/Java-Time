@@ -44,12 +44,11 @@ class Application : Application() {
     }
 
     private fun setupDependencyInjection() {
-        startKoin{
+        startKoin {
             androidLogger()
             androidContext(this@Application)
             modules(modules)
         }
-
     }
 
     private fun setupStetho() {

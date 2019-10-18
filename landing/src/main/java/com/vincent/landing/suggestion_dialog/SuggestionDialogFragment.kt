@@ -46,13 +46,13 @@ class SuggestionDialogFragment
 
     private fun subscribeToViewModel() {
         val viewStateDisposable = viewModel.viewStateEvents
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(rxProvider.uiScheduler())
             .subscribe { onViewStateEvent(it) }
         val snackbarDisposable = viewModel.snackbarEvents
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(rxProvider.uiScheduler())
             .subscribe { showSnackbar(it) }
         val loadingDisposable = viewModel.loadingEvents
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(rxProvider.uiScheduler())
             .subscribe { showLoading(it) }
 
         addDisposables(viewStateDisposable, snackbarDisposable, loadingDisposable)

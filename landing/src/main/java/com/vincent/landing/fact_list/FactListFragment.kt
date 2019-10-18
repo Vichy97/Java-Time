@@ -1,6 +1,9 @@
 package com.vincent.landing.fact_list
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 
 import com.vincent.core.ui.BaseFragment
@@ -17,6 +20,12 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
 
     private val viewModel: FactListViewModel by viewModel()
     private val factListAdapter: FactListAdapter by inject()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupAdapter()
@@ -38,6 +47,21 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
         vp_fact_list.adapter = factListAdapter
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_fact_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.btn_about -> {
+                viewModel.onAboutClicked()
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -45,18 +69,24 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
         viewModel.start()
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        swipe_container.isRefreshing = false
+    }
+
     private fun subscribeToViewModel() {
         val viewStateDisposable = viewModel.viewStateEvents
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(rxProvider.uiScheduler())
             .subscribe { onViewStateReceived(it) }
         val snackBarDisposable = viewModel.snackbarEvents
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(rxProvider.uiScheduler())
             .subscribe { showSnackbar(it) }
         val loadingDisposable = viewModel.loadingEvents
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(rxProvider.uiScheduler())
             .subscribe { showLoading(it) }
         val navigationDisposable = viewModel.navigationEvents
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(rxProvider.uiScheduler())
             .subscribe { navigate(it) }
 
         addDisposables(

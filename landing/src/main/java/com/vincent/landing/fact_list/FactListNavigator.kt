@@ -9,4 +9,8 @@ internal class FactListNavigator(rxProvider: RxProvider) : BaseNavigator(rxProvi
     fun showSuggestionDialog() {
         navigate(R.id.action_factListFragment_to_suggestionDialogFragment)
     }
+
+    fun navigateToAbout() {
+        navigate(R.id.action_factListFragment_to_aboutFragment)
+    }
 }

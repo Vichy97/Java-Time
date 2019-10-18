@@ -9,13 +9,18 @@
     <fragment
         android:id="@+id/factListFragment"
         android:name="com.vincent.landing.fact_list.FactListFragment"
-        android:label="fragment_landing"
+        android:label="@string/fact_list_title"
         tools:layout="@layout/fragment_fact_list">
 
         <deepLink app:uri="javatime://fact_list"/>
+
         <action
             android:id="@+id/action_factListFragment_to_suggestionDialogFragment"
             app:destination="@id/suggestionDialogFragment" />
+
+        <action
+            android:id="@+id/action_factListFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"/>
     </fragment>
 
     <dialog
@@ -23,4 +28,10 @@
         android:name="com.vincent.landing.suggestion_dialog.SuggestionDialogFragment"
         android:label="SuggestionDialogFragment"
         tools:layout="@layout/dialog_suggestion"/>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.vincent.landing.about.AboutFragment"
+        android:label="@string/about_title"
+        tools:layout="@layout/fragment_about"/>
 </navigation>

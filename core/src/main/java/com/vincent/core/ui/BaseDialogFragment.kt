@@ -12,9 +12,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 
 import com.google.android.material.snackbar.Snackbar
+import com.vincent.core.utils.RxProvider
 
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.koin.android.ext.android.inject
 
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
@@ -25,7 +26,8 @@ abstract class BaseDialogFragment(
     private val module: Module
 ) : DialogFragment() {
 
-    private val compositeDisposable = CompositeDisposable()
+    protected val rxProvider: RxProvider by inject()
+    private val compositeDisposable = rxProvider.compositeDisposable()
     private var snackbar: Snackbar? = null
     private val navController: NavController by lazy { findNavController() }
 
@@ -62,9 +64,8 @@ abstract class BaseDialogFragment(
         compositeDisposable.clear()
     }
 
-    @CallSuper
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
 
         compositeDisposable.dispose()
         unloadKoinModules(module)

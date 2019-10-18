@@ -10,7 +10,7 @@ val analyticsModule = module {
         FirebaseAnalytics.getInstance(androidContext())
     }
 
-    single<AnalyticsService>() {
+    single<AnalyticsService> {
         AnalyticsService(get<FirebaseAnalytics>())
     }
 }

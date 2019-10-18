@@ -13,6 +13,7 @@ import com.vincent.landing.R
 
 import timber.log.Timber
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 internal class FactListViewModel(
     rxProvider: RxProvider,
@@ -30,8 +31,6 @@ internal class FactListViewModel(
 
     private fun getFacts() {
         val disposable = factsRepository.getAllFacts()
-            .subscribeOn(rxProvider.ioScheduler())
-            .observeOn(rxProvider.uiScheduler())
             .doOnSubscribe { showLoading(true) }
             .doFinally { showLoading(false) }
             .subscribe({ onGetFactsSuccess(it) }, { onGetFactsError(it) })
@@ -51,7 +50,7 @@ internal class FactListViewModel(
         Timber.e(throwable)
 
         val error = when (throwable) {
-            is SocketTimeoutException -> {
+            is SocketTimeoutException, is UnknownHostException -> {
                 resourceProvider.getString(R.string.internet_connection_error)
             }
             else -> resourceProvider.getString(R.string.generic_error)
@@ -67,5 +66,9 @@ internal class FactListViewModel(
 
     fun onFloatingActionButtonClicked() {
         navigator.showSuggestionDialog()
+    }
+
+    fun onAboutClicked() {
+        navigator.navigateToAbout()
     }
 }

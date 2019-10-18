@@ -6,7 +6,7 @@
 
         <item name="hintEnabled">true</item>
         <item name="errorEnabled">true</item>
-        <item name="boxStrokeColor">@color/secondary_dark_color</item>
-        <item name="hintTextColor">@color/secondary_dark_color</item>
+        <item name="boxStrokeColor">@color/secondary_dark</item>
+        <item name="hintTextColor">@color/secondary_dark</item>
     </style>
 </resources>

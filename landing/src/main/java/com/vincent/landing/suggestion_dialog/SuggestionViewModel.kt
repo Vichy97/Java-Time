@@ -1,6 +1,7 @@
 package com.vincent.landing.suggestion_dialog
 
 import android.os.Bundle
+
 import com.vincent.core.analytics.AnalyticsService
 import com.vincent.core.analytics.Page
 import com.vincent.core.ui.BaseViewModel
@@ -10,8 +11,11 @@ import com.vincent.domain.model.Suggestion
 import com.vincent.domain.repository.SuggestionRepository
 import com.vincent.landing.R
 import com.vincent.landing.suggestion_dialog.validation.SuggestionValidator
+
 import timber.log.Timber
+
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 internal class SuggestionViewModel(
     rxProvider: RxProvider,
@@ -65,14 +69,12 @@ internal class SuggestionViewModel(
             return
         }
 
-       sendSuggestion()
+        sendSuggestion()
     }
 
     private fun sendSuggestion() {
         val suggestion = Suggestion(name, email, suggestion)
         val disposable = suggestionRepository.sendSuggestion(suggestion)
-            .subscribeOn(rxProvider.ioScheduler())
-            .observeOn(rxProvider.uiScheduler())
             .doOnSubscribe { loadingSubject.onNext(true) }
             .doFinally { loadingSubject.onNext(false) }
             .subscribe({ onSendSuggestionSuccess() }, { onSendSuggestionError(it) })
@@ -88,7 +90,7 @@ internal class SuggestionViewModel(
         Timber.e(throwable)
 
         val error = when (throwable) {
-            is SocketTimeoutException -> {
+            is SocketTimeoutException, is UnknownHostException -> {
                 resourceProvider.getString(R.string.internet_connection_error)
             }
             else -> resourceProvider.getString(R.string.generic_error)

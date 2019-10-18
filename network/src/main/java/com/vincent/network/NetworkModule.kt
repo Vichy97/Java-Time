@@ -16,7 +16,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 import java.util.concurrent.TimeUnit
 
-private const val CALL_TIMEOUT = 60L
+private const val CALL_TIMEOUT = 30L
 
 val networkModule = module {
 
