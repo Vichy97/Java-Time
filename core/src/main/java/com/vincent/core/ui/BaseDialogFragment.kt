@@ -4,18 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 
 import com.google.android.material.snackbar.Snackbar
-import com.vincent.core.utils.RxProvider
-
-import io.reactivex.disposables.Disposable
-import org.koin.android.ext.android.inject
 
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
@@ -23,16 +16,13 @@ import org.koin.core.module.Module
 
 abstract class BaseDialogFragment(
     @LayoutRes private val layoutId: Int,
-    private val module: Module
+    private val module: Module? = null
 ) : DialogFragment() {
 
-    protected val rxProvider: RxProvider by inject()
-    private val compositeDisposable = rxProvider.compositeDisposable()
     private var snackbar: Snackbar? = null
-    private val navController: NavController by lazy { findNavController() }
 
     init {
-        loadKoinModules(module)
+        module?.let { loadKoinModules(it) }
     }
 
     @CallSuper
@@ -61,39 +51,23 @@ abstract class BaseDialogFragment(
         super.onStop()
 
         snackbar?.dismiss()
-        compositeDisposable.clear()
     }
 
+    @CallSuper
     override fun onDestroy() {
         super.onDestroy()
 
-        compositeDisposable.dispose()
-        unloadKoinModules(module)
+        module?.let { unloadKoinModules(it) }
     }
 
-    protected fun navigate(navigationEvent: NavigationEvent) {
-        when(navigationEvent) {
-            is NavigationEvent.UriEvent -> {
-                navController.navigate(navigationEvent.uri)
-            }
-            is NavigationEvent.IdEvent -> {
-                navController.navigate(navigationEvent.actionId, navigationEvent.arguments)
-            }
-        }
+    protected open fun showLoading(loading: Boolean) {
+        view?.isClickable = !loading
     }
 
     protected fun showSnackbar(message: String) {
-        view?.let {
-            snackbar = Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
+        snackbar = view?.let {
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
         }
         snackbar?.show()
-    }
-
-    protected fun addDisposable(disposable: Disposable) {
-        compositeDisposable.add(disposable)
-    }
-
-    protected fun addDisposables(vararg disposables: Disposable) {
-        compositeDisposable.addAll(*disposables)
     }
 }

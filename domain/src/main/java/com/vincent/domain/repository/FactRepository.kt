@@ -11,8 +11,7 @@ class FactRepository(
     private val factsApi: FactsApi
 ) {
 
-    fun getAllFacts(): Single<List<Fact>> = factsApi
-        .getAllFacts()
+    fun getAllFacts(): Single<List<Fact>> = factsApi.getAllFacts()
         .subscribeOn(rxProvider.ioScheduler())
         .flattenAsObservable { it }
         .map { Fact(it) }

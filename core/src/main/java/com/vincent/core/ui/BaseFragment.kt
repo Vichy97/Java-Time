@@ -1,16 +1,14 @@
 package com.vincent.core.ui
 
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.annotation.MenuRes
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 
 import com.google.android.material.snackbar.Snackbar
-import com.vincent.core.utils.RxProvider
-
-import io.reactivex.disposables.Disposable
-import org.koin.android.ext.android.inject
 
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
@@ -18,16 +16,28 @@ import org.koin.core.module.Module
 
 abstract class BaseFragment(
     @LayoutRes layoutId: Int,
+    @MenuRes private val menuId: Int? = null,
     private val module: Module? = null
 ) : Fragment(layoutId) {
 
-    protected val rxProvider: RxProvider by inject()
-    private val compositeDisposable = rxProvider.compositeDisposable()
     private var snackbar: Snackbar? = null
-    private val navController: NavController by lazy { findNavController() }
 
     init {
         module?.let { loadKoinModules(it) }
+    }
+
+    @CallSuper
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        menuId?.let { setHasOptionsMenu(true) }
+    }
+
+    @CallSuper
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        menuId?.let { inflater.inflate(menuId, menu) }
     }
 
     @CallSuper
@@ -35,26 +45,17 @@ abstract class BaseFragment(
         super.onStop()
 
         snackbar?.dismiss()
-        compositeDisposable.clear()
     }
 
     @CallSuper
     override fun onDestroy() {
         super.onDestroy()
 
-        compositeDisposable.dispose()
         module?.let { unloadKoinModules(it) }
     }
 
-    protected fun navigate(navigationEvent: NavigationEvent) {
-        when (navigationEvent) {
-            is NavigationEvent.UriEvent -> {
-                navController.navigate(navigationEvent.uri)
-            }
-            is NavigationEvent.IdEvent -> {
-                navController.navigate(navigationEvent.actionId, navigationEvent.arguments)
-            }
-        }
+    protected open fun showLoading(loading: Boolean) {
+        view?.isClickable = !loading
     }
 
     protected fun showSnackbar(message: String) {
@@ -62,13 +63,5 @@ abstract class BaseFragment(
             Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
         }
         snackbar?.show()
-    }
-
-    protected fun addDisposable(disposable: Disposable) {
-        compositeDisposable.add(disposable)
-    }
-
-    protected fun addDisposables(vararg disposables: Disposable) {
-        compositeDisposable.addAll(*disposables)
     }
 }

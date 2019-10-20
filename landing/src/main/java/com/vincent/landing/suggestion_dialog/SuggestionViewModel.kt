@@ -1,6 +1,6 @@
 package com.vincent.landing.suggestion_dialog
 
-import android.os.Bundle
+import androidx.navigation.NavArgs
 
 import com.vincent.core.analytics.AnalyticsService
 import com.vincent.core.analytics.Page
@@ -9,22 +9,16 @@ import com.vincent.core.utils.ResourceProvider
 import com.vincent.core.utils.RxProvider
 import com.vincent.domain.model.Suggestion
 import com.vincent.domain.repository.SuggestionRepository
-import com.vincent.landing.R
 import com.vincent.landing.suggestion_dialog.validation.SuggestionValidator
-
-import timber.log.Timber
-
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
 internal class SuggestionViewModel(
     rxProvider: RxProvider,
     navigator: SuggestionNavigator,
-    private val resourceProvider: ResourceProvider,
+    resourceProvider: ResourceProvider,
     private val analyticsService: AnalyticsService,
     private val suggestionRepository: SuggestionRepository,
     private val suggestionValidator: SuggestionValidator
-) : BaseViewModel<SuggestionViewState, SuggestionNavigator>(rxProvider, navigator) {
+) : BaseViewModel<SuggestionViewState>(rxProvider, resourceProvider, navigator) {
 
     private var viewState = SuggestionViewState()
 
@@ -32,7 +26,9 @@ internal class SuggestionViewModel(
     private var email = ""
     private var suggestion = ""
 
-    override fun start(arguments: Bundle?) {
+    override fun start(arguments: NavArgs?) {
+        super.start(arguments)
+
         analyticsService.trackPage(Page.SUGGESTION)
     }
 
@@ -44,19 +40,19 @@ internal class SuggestionViewModel(
         email = text
 
         viewState = viewState.copy(emailError = null, suggestionError = null)
-        viewStateSubject.onNext(viewState)
+        sendViewState(viewState)
     }
 
     fun onSuggestionTextChanged(text: String) {
         suggestion = text
 
         viewState = viewState.copy(emailError = null, suggestionError = null)
-        viewStateSubject.onNext(viewState)
+        sendViewState(viewState)
     }
 
     fun onCancelClicked() {
         viewState = viewState.copy(dismissed = true)
-        viewStateSubject.onNext(viewState)
+        sendViewState(viewState)
     }
 
     fun onSendClicked() {
@@ -65,7 +61,7 @@ internal class SuggestionViewModel(
 
         if (emailError.isNotEmpty() || suggestionError.isNotEmpty()) {
             viewState = viewState.copy(emailError = emailError, suggestionError = suggestionError)
-            viewStateSubject.onNext(viewState)
+            sendViewState(viewState)
             return
         }
 
@@ -75,27 +71,14 @@ internal class SuggestionViewModel(
     private fun sendSuggestion() {
         val suggestion = Suggestion(name, email, suggestion)
         val disposable = suggestionRepository.sendSuggestion(suggestion)
-            .doOnSubscribe { loadingSubject.onNext(true) }
-            .doFinally { loadingSubject.onNext(false) }
-            .subscribe({ onSendSuggestionSuccess() }, { onSendSuggestionError(it) })
-        addDisposable(disposable)
+            .doOnSubscribe { showLoading(true) }
+            .doFinally { showLoading(false) }
+            .subscribe({ onSendSuggestionSuccess() }, { onError(it) })
+        addDisposables(disposable)
     }
 
     private fun onSendSuggestionSuccess() {
         viewState = viewState.copy(dismissed = true)
-        viewStateSubject.onNext(viewState)
-    }
-
-    private fun onSendSuggestionError(throwable: Throwable) {
-        Timber.e(throwable)
-
-        val error = when (throwable) {
-            is SocketTimeoutException, is UnknownHostException -> {
-                resourceProvider.getString(R.string.internet_connection_error)
-            }
-            else -> resourceProvider.getString(R.string.generic_error)
-        }
-
-        snackbarSubject.onNext(error)
+        sendViewState(viewState)
     }
 }

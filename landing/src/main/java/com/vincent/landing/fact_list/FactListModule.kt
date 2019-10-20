@@ -13,8 +13,8 @@ internal val factListModule = module {
     viewModel<FactListViewModel> {
         FactListViewModel(
             get<RxProvider>(),
-            get<FactListNavigator>(),
             get<ResourceProvider>(),
+            get<FactListNavigator>(),
             get<AnalyticsService>(),
             get<FactRepository>()
         )

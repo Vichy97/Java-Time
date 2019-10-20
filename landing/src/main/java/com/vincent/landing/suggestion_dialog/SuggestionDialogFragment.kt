@@ -4,17 +4,20 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import com.vincent.core.ui.BaseDialogFragment
+
+import com.vincent.core.ui.BaseMvvmDialogFragment
 import com.vincent.landing.R
 
 import kotlinx.android.synthetic.main.dialog_suggestion.*
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SuggestionDialogFragment
-    : BaseDialogFragment(R.layout.dialog_suggestion, suggestionModule) {
+internal class SuggestionDialogFragment : BaseMvvmDialogFragment<SuggestionViewState>(
+    R.layout.dialog_suggestion,
+    suggestionModule
+) {
 
-    private val viewModel: SuggestionViewModel by viewModel()
+    override val viewModel: SuggestionViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,21 +46,7 @@ class SuggestionDialogFragment
         viewModel.start()
     }
 
-    private fun subscribeToViewModel() {
-        val viewStateDisposable = viewModel.viewStateEvents
-            .observeOn(rxProvider.uiScheduler())
-            .subscribe { onViewStateEvent(it) }
-        val snackbarDisposable = viewModel.snackbarEvents
-            .observeOn(rxProvider.uiScheduler())
-            .subscribe { showSnackbar(it) }
-        val loadingDisposable = viewModel.loadingEvents
-            .observeOn(rxProvider.uiScheduler())
-            .subscribe { showLoading(it) }
-
-        addDisposables(viewStateDisposable, snackbarDisposable, loadingDisposable)
-    }
-
-    private fun onViewStateEvent(viewState: SuggestionViewState) {
+    override fun onViewStateEvent(viewState: SuggestionViewState) {
         if (viewState.dismissed) {
             return dismiss()
         }
@@ -66,8 +55,9 @@ class SuggestionDialogFragment
         til_suggestion.error = viewState.suggestionError
     }
 
-    private fun showLoading(loading: Boolean) {
+    override fun showLoading(loading: Boolean) {
+        super.showLoading(loading)
+
         progress_bar.isVisible = loading
-        view?.isClickable = !loading
     }
 }
