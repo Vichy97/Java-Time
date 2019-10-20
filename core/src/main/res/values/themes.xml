@@ -36,5 +36,7 @@
         <item name="buttonStyle">@style/Button.Primary</item>
         <item name="textInputStyle">@style/TextInputLayout.Primary</item>
         <item name="android:toolbarStyle">@style/Toolbar</item>
+
+        <item name="fontFamily">@font/handlee</item>
     </style>
 </resources>

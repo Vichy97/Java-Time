@@ -19,7 +19,7 @@ class FactRepositoryTest : BaseTest() {
     override fun setup() {
         super.setup()
 
-        factRepository = FactRepository(factsApi)
+        factRepository = FactRepository(rxProvider, factsApi)
     }
 
     @Test

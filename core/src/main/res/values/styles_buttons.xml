@@ -5,6 +5,7 @@
         <item name="backgroundTint">@color/secondary</item>
         <item name="rippleColor">@color/secondary_dark</item>
         <item name="android:padding">@dimen/double_spacing</item>
+        <item name="fontFamily">@font/handlee</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -12,5 +13,6 @@
         <item name="rippleColor">@color/secondary</item>
         <item name="android:padding">@dimen/double_spacing</item>
         <item name="android:textColor">@color/on_surface</item>
+        <item name="fontFamily">@font/handlee</item>
     </style>
 </resources>

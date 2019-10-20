@@ -9,8 +9,6 @@ import android.view.View
 import com.vincent.core.ui.BaseFragment
 import com.vincent.landing.R
 
-import io.reactivex.android.schedulers.AndroidSchedulers
-
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.android.ext.android.inject
 
@@ -25,6 +23,7 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
+        viewModel.start()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,13 +65,12 @@ internal class FactListFragment : BaseFragment(R.layout.fragment_fact_list, fact
         super.onStart()
 
         subscribeToViewModel()
-        viewModel.start()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroyView() {
+        super.onDestroyView()
 
-        swipe_container.isRefreshing = false
+        vp_fact_list.adapter = null
     }
 
     private fun subscribeToViewModel() {

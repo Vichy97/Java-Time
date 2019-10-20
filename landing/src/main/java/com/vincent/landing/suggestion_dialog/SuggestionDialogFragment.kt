@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.vincent.core.ui.BaseDialogFragment
 import com.vincent.landing.R
-import io.reactivex.android.schedulers.AndroidSchedulers
 
 import kotlinx.android.synthetic.main.dialog_suggestion.*
 

@@ -16,7 +16,7 @@
 
         <action
             android:id="@+id/action_factListFragment_to_suggestionDialogFragment"
-            app:destination="@id/suggestionDialogFragment" />
+            app:destination="@id/suggestionDialogFragment"/>
 
         <action
             android:id="@+id/action_factListFragment_to_aboutFragment"

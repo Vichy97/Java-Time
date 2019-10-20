@@ -15,7 +15,7 @@ internal class FactListAdapter : RecyclerView.Adapter<FactViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FactViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.card_fact, parent, false)
+            .inflate(R.layout.layout_fact, parent, false)
         return FactViewHolder(itemView)
     }
 

@@ -9,7 +9,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.Completable
-import io.reactivex.Single
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 
@@ -22,7 +21,7 @@ class SuggestionRepositoryTest : BaseTest() {
     override fun setup() {
         super.setup()
 
-        suggestionRepository = SuggestionRepository(suggestionsApi)
+        suggestionRepository = SuggestionRepository(rxProvider, suggestionsApi)
     }
 
     @Test
