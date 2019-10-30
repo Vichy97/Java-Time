@@ -5,7 +5,7 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.1"
+    buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.vincent.javatime"
 
@@ -43,12 +43,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 }
 

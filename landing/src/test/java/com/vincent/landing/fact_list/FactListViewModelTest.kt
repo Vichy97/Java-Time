@@ -31,8 +31,8 @@ class FactListViewModelTest : BaseTest() {
 
         viewModel = FactListViewModel(
             rxProvider,
-            navigator,
             resourceProvider,
+            navigator,
             analyticsService,
             factRepository
         )
