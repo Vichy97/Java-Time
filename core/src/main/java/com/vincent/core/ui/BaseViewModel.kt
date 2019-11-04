@@ -1,59 +1,61 @@
 package com.vincent.core.ui
 
-import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavArgs
 
 import com.vincent.core.R
-import com.vincent.core.utils.ResourceProvider
-import com.vincent.core.utils.RxProvider
+import com.vincent.core.util.ResourceProvider
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 
 import timber.log.Timber
 
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 abstract class BaseViewModel<VS : BaseViewState>(
-    protected val rxProvider: RxProvider,
     protected val resourceProvider: ResourceProvider,
+    uiDispatcher: CoroutineDispatcher,
+    ioDispatcher: CoroutineDispatcher,
     navigator: BaseNavigator
 ) : ViewModel() {
 
-    private val compositeDisposable = rxProvider.compositeDisposable()
-    private val viewStateSubject = rxProvider.behaviorSubject<VS>()
-    private val snackbarSubject = rxProvider.publishSubject<String>()
-    private val loadingSubject = rxProvider.behaviorSubject<Boolean>()
+    val supervisorJob = SupervisorJob()
+    val uiScope = CoroutineScope(supervisorJob + uiDispatcher)
+    val ioScope = CoroutineScope(supervisorJob + ioDispatcher)
 
-    val navigationEvents: Observable<NavigationEvent> = navigator.navigationEvents
-    val viewStateEvents: Observable<VS> = viewStateSubject
-    val snackbarEvents: Observable<String> = snackbarSubject
-    val loadingEvents: Observable<Boolean> = loadingSubject
+    private val viewStateChannel = ConflatedBroadcastChannel<VS>()
+    private val snackbarChannel = BroadcastChannel<String>(1)
+    private val loadingChannel = BroadcastChannel<Boolean>(1)
+
+    val navigationEvents: Flow<NavigationEvent> = navigator.navigationEvents
+    val viewStateEvents: Flow<VS> = viewStateChannel.asFlow()
+    val snackbarEvents: Flow<String> = snackbarChannel.asFlow()
+    val loadingEvents: Flow<Boolean> = loadingChannel.asFlow()
 
     open fun start(arguments: NavArgs? = null) {}
 
-    @CallSuper
-    override fun onCleared() {
-        super.onCleared()
-
-        compositeDisposable.dispose()
-    }
-
-    protected fun sendViewState(viewState: VS) {
+    protected fun sendViewState(viewState: VS) = uiScope.launch {
         Timber.d(viewState.toString())
 
-        viewStateSubject.onNext(viewState)
+        viewStateChannel.send(viewState)
     }
 
-    protected fun showSnackbar(message: String) = snackbarSubject.onNext(message)
+    protected fun showSnackbar(message: String) = uiScope.launch {
+        snackbarChannel.send(message)
+    }
 
-    protected fun showLoading(loading: Boolean) = loadingSubject.onNext(loading)
+    protected fun showLoading(loading: Boolean) = uiScope.launch {
+        loadingChannel.send(loading)
+    }
 
     protected open fun onError(throwable: Throwable) {
-        Timber.e(throwable)
-
         val error = when (throwable) {
             is SocketTimeoutException, is UnknownHostException -> {
                 resourceProvider.getString(R.string.internet_connection_error)
@@ -64,5 +66,9 @@ abstract class BaseViewModel<VS : BaseViewState>(
         showSnackbar(error)
     }
 
-    protected fun addDisposables(vararg disposables: Disposable) = compositeDisposable.addAll(*disposables)
+    override fun onCleared() {
+        super.onCleared()
+
+        supervisorJob.cancel()
+    }
 }

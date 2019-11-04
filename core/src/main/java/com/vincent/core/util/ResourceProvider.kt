@@ -1,4 +1,4 @@
-package com.vincent.core.utils
+package com.vincent.core.util
 
 import android.content.res.Resources
 import androidx.annotation.IntegerRes

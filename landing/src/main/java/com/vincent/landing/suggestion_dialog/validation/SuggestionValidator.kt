@@ -2,7 +2,7 @@ package com.vincent.landing.suggestion_dialog.validation
 
 import androidx.core.util.PatternsCompat
 
-import com.vincent.core.utils.ResourceProvider
+import com.vincent.core.util.ResourceProvider
 import com.vincent.landing.R
 
 internal class SuggestionValidator(private val resourceProvider: ResourceProvider) {

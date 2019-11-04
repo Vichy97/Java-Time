@@ -2,19 +2,22 @@ package com.vincent.landing.fact_list
 
 import com.vincent.core.analytics.AnalyticsService
 import com.vincent.core.analytics.Page
-import com.vincent.core.utils.ResourceProvider
+import com.vincent.core.util.ResourceProvider
 import com.vincent.core_test.BaseTest
 import com.vincent.domain.model.Fact
 import com.vincent.domain.repository.FactRepository
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import io.reactivex.Single
-import io.reactivex.observers.TestObserver
+import io.mockk.*
+import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+import kotlinx.coroutines.test.runBlockingTest
 
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class FactListViewModelTest : BaseTest() {
 
     private val navigator = mockk<FactListNavigator>(relaxed = true)
@@ -22,23 +25,24 @@ class FactListViewModelTest : BaseTest() {
     private val analyticsService = mockk<AnalyticsService>(relaxed = true)
     private val factRepository = mockk<FactRepository>(relaxed = true)
     private lateinit var viewModel: FactListViewModel
-    private lateinit var viewStateObserver: TestObserver<FactListViewState>
-    private lateinit var loadingObserver: TestObserver<Boolean>
-    private lateinit var snackbarObserver: TestObserver<String>
 
     override fun setup() {
         super.setup()
 
         viewModel = FactListViewModel(
-            rxProvider,
             resourceProvider,
+            testDispatcher,
+            testDispatcher,
             navigator,
             analyticsService,
             factRepository
         )
-        viewStateObserver = viewModel.viewStateEvents.test()
-        loadingObserver = viewModel.loadingEvents.test()
-        snackbarObserver = viewModel.snackbarEvents.test()
+    }
+
+    override fun tearDown() {
+        super.tearDown()
+
+        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test
@@ -49,42 +53,48 @@ class FactListViewModelTest : BaseTest() {
     }
 
     @Test
-    fun should_getFactsFromRepository_when_viewModelStarts() {
+    fun should_getFactsFromRepository_when_viewModelStarts() = runBlockingTest {
         viewModel.start()
 
-        verify { factRepository.getAllFacts() }
+        coVerify { factRepository.getAllFacts() }
     }
 
     @Test
-    fun should_emitSnackBarMessage_when_repositoryEmitsError() {
+    fun should_emitSnackBarMessage_when_repositoryEmitsError() = runBlockingTest {
         val exception = Exception("exception")
-        every { factRepository.getAllFacts() } returns Single.error(exception)
+        coEvery { factRepository.getAllFacts() } throws exception
+        every { resourceProvider.getString(any()) } returns "error!"
+
+        var actual = ""
+        val job = launch {
+            viewModel.snackbarEvents
+                .collect {
+                actual = it
+            }
+        }
 
         viewModel.start()
 
-        loadingObserver.assertValues(true, false)
-        snackbarObserver.assertValueCount(1)
+        assertEquals(exception.message, actual)
+
+        job.cancel()
     }
+
 
     @Test
     fun should_emitViewState_when_repositoryReturnsFacts() {
         val fact = Fact("someFact")
         val facts = listOf(fact)
-        every { factRepository.getAllFacts() } returns Single.just(facts)
+        coEvery { factRepository.getAllFacts() } returns facts
 
         viewModel.start()
-
-        loadingObserver.assertValues(true, false)
-        viewStateObserver.assertValue {
-            it.facts == facts
-        }
     }
 
     @Test
     fun should_getFactsFromRepository_when_swipeToRefresh() {
         viewModel.onSwipeToRefresh()
 
-        verify { factRepository.getAllFacts() }
+        coVerify { factRepository.getAllFacts() }
     }
 
     @Test

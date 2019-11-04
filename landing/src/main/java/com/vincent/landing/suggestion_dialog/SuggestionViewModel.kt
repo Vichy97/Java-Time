@@ -5,20 +5,30 @@ import androidx.navigation.NavArgs
 import com.vincent.core.analytics.AnalyticsService
 import com.vincent.core.analytics.Page
 import com.vincent.core.ui.BaseViewModel
-import com.vincent.core.utils.ResourceProvider
-import com.vincent.core.utils.RxProvider
+import com.vincent.core.util.ResourceProvider
 import com.vincent.domain.model.Suggestion
 import com.vincent.domain.repository.SuggestionRepository
 import com.vincent.landing.suggestion_dialog.validation.SuggestionValidator
+import kotlinx.coroutines.CoroutineDispatcher
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.launch
+
+import kotlin.Exception
+import timber.log.Timber
+
+@FlowPreview
+@ExperimentalCoroutinesApi
 internal class SuggestionViewModel(
-    rxProvider: RxProvider,
-    navigator: SuggestionNavigator,
     resourceProvider: ResourceProvider,
+    uiDispatcher: CoroutineDispatcher,
+    ioDispatcher: CoroutineDispatcher,
+    navigator: SuggestionNavigator,
     private val analyticsService: AnalyticsService,
     private val suggestionRepository: SuggestionRepository,
     private val suggestionValidator: SuggestionValidator
-) : BaseViewModel<SuggestionViewState>(rxProvider, resourceProvider, navigator) {
+) : BaseViewModel<SuggestionViewState>(resourceProvider, uiDispatcher, ioDispatcher, navigator) {
 
     private var viewState = SuggestionViewState()
 
@@ -68,13 +78,15 @@ internal class SuggestionViewModel(
         sendSuggestion()
     }
 
-    private fun sendSuggestion() {
-        val suggestion = Suggestion(name, email, suggestion)
-        val disposable = suggestionRepository.sendSuggestion(suggestion)
-            .doOnSubscribe { showLoading(true) }
-            .doFinally { showLoading(false) }
-            .subscribe({ onSendSuggestionSuccess() }, { onError(it) })
-        addDisposables(disposable)
+    private fun sendSuggestion() = ioScope.launch {
+        try {
+            val suggestion = Suggestion(name, email, suggestion)
+            suggestionRepository.sendSuggestion(suggestion)
+            onSendSuggestionSuccess()
+        } catch (e: Exception) {
+            Timber.e(e)
+            onError(e)
+        }
     }
 
     private fun onSendSuggestionSuccess() {

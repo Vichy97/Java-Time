@@ -7,9 +7,10 @@ import com.vincent.core.analytics.analyticsModule
 import com.vincent.core.log.CrashlyticsTree
 
 import com.vincent.core.parsing.moshiModule
-import com.vincent.core.utils.utilsModule
+import com.vincent.core.util.utilsModule
 import com.vincent.domain.repository.repositoryModule
 import com.vincent.network.networkModule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -17,6 +18,7 @@ import org.koin.core.context.startKoin
 
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 class Application : Application() {
 
     private val modules = listOf(

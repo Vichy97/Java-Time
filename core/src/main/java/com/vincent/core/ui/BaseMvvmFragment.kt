@@ -6,24 +6,23 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.*
 
-import com.vincent.core.utils.RxProvider
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.collect
 
-import org.koin.android.ext.android.inject
 import org.koin.core.module.Module
 
-import timber.log.Timber
-
+@FlowPreview
+@ExperimentalCoroutinesApi
 abstract class BaseMvvmFragment<VS : BaseViewState>(
     @LayoutRes layoutId: Int,
     @MenuRes menuId: Int? = null,
     module: Module? = null
 ) : BaseFragment(layoutId, menuId, module) {
 
-    protected val rxProvider: RxProvider by inject()
-    private val compositeDisposable = rxProvider.compositeDisposable()
     private val navController: NavController by lazy { findNavController() }
+    private val supervisorJob = SupervisorJob()
+    private val uiScope = CoroutineScope(supervisorJob + Dispatchers.Main)
 
     protected abstract val viewModel: BaseViewModel<VS>
 
@@ -42,35 +41,11 @@ abstract class BaseMvvmFragment<VS : BaseViewState>(
     }
 
     @CallSuper
-    override fun onStop() {
-        super.onStop()
-
-        compositeDisposable.clear()
-    }
-
-    @CallSuper
-    override fun onDestroy() {
-        super.onDestroy()
-
-        compositeDisposable.dispose()
-    }
-
-    @CallSuper
-    protected open fun subscribeToViewModel() {
-        val viewStateDisposable = viewModel.viewStateEvents
-            .observeOn(rxProvider.uiScheduler())
-            .subscribe({ onViewStateEvent(it) }, { Timber.e(it) })
-        val navigationDisposable = viewModel.navigationEvents
-            .observeOn(rxProvider.uiScheduler())
-            .subscribe({ onNavigationEvent(it) }, { Timber.e(it) })
-        val snackbarDisposable = viewModel.snackbarEvents
-            .observeOn(rxProvider.uiScheduler())
-            .subscribe({ showSnackbar(it) }, { Timber.e(it) })
-        val loadingDisposable = viewModel.loadingEvents
-            .observeOn(rxProvider.uiScheduler())
-            .subscribe({ showLoading(it) }, { Timber.e(it) })
-
-        addDisposables(viewStateDisposable, navigationDisposable, snackbarDisposable, loadingDisposable)
+    protected open fun subscribeToViewModel() = uiScope.launch {
+        viewModel.viewStateEvents.collect { onViewStateEvent(it) }
+        viewModel.loadingEvents.collect { showLoading(it) }
+        viewModel.navigationEvents.collect { onNavigationEvent(it) }
+        viewModel.snackbarEvents.collect { showSnackbar(it) }
     }
 
     protected abstract fun onViewStateEvent(viewState: VS)
@@ -86,7 +61,9 @@ abstract class BaseMvvmFragment<VS : BaseViewState>(
         }
     }
 
-    protected fun addDisposables(vararg disposables: Disposable) {
-        compositeDisposable.addAll(*disposables)
+    override fun onDestroy() {
+        super.onDestroy()
+
+        supervisorJob.cancel()
     }
 }

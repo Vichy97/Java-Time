@@ -2,19 +2,22 @@ package com.vincent.landing.suggestion_dialog
 
 import com.vincent.core.analytics.AnalyticsService
 import com.vincent.core.analytics.Page
-import com.vincent.core.utils.ResourceProvider
+import com.vincent.core.util.ResourceProvider
 import com.vincent.core_test.BaseTest
 import com.vincent.domain.repository.SuggestionRepository
 import com.vincent.landing.suggestion_dialog.validation.SuggestionValidator
+import io.mockk.coEvery
 
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
-import io.reactivex.observers.TestObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class SuggestionViewModelTest : BaseTest() {
 
     private val navigator = mockk<SuggestionNavigator>(relaxed = true)
@@ -24,25 +27,19 @@ class SuggestionViewModelTest : BaseTest() {
     private val suggestionValidator = mockk<SuggestionValidator>(relaxed = true)
 
     private lateinit var viewModel: SuggestionViewModel
-    private lateinit var viewStateObserver: TestObserver<SuggestionViewState>
-    private lateinit var loadingObserver: TestObserver<Boolean>
-    private lateinit var snackbarObserver: TestObserver<String>
 
     override fun setup() {
         super.setup()
 
         viewModel = SuggestionViewModel(
-            rxProvider,
-            navigator,
             resourceProvider,
+            testDispatcher,
+            testDispatcher,
+            navigator,
             analyticsService,
             suggestionRepository,
             suggestionValidator
         )
-
-        viewStateObserver = viewModel.viewStateEvents.test()
-        loadingObserver = viewModel.loadingEvents.test()
-        snackbarObserver = viewModel.snackbarEvents.test()
 
         every { suggestionValidator.validateEmail(any()) } returns ""
     }
@@ -57,8 +54,6 @@ class SuggestionViewModelTest : BaseTest() {
     @Test
     fun should_emitViewState_when_cancelClicked() {
         viewModel.onCancelClicked()
-
-        viewStateObserver.assertValue { it.dismissed }
     }
 
     @Test
@@ -67,10 +62,6 @@ class SuggestionViewModelTest : BaseTest() {
         every { suggestionValidator.validateEmail(any()) } returns invalidEmailError
 
         viewModel.onSendClicked()
-
-        viewStateObserver.assertValue {
-            !it.dismissed && it.emailError == invalidEmailError
-        }
     }
 
     @Test
@@ -79,51 +70,28 @@ class SuggestionViewModelTest : BaseTest() {
         every { suggestionValidator.validateSuggestion(any()) } returns invalidSuggestionError
 
         viewModel.onSendClicked()
-
-        viewStateObserver.assertValue {
-            !it.dismissed && it.suggestionError == invalidSuggestionError
-        }
     }
 
     @Test
     fun should_emitSnackbar_when_repositoryEmitsError() {
         val exception = Exception()
-        every { suggestionRepository.sendSuggestion(any()) } returns Completable.error(exception)
+        coEvery { suggestionRepository.sendSuggestion(any()) } throws exception
 
         viewModel.onSendClicked()
-
-        loadingObserver.assertValues(true, false)
-        viewStateObserver.assertNoValues()
-        snackbarObserver.assertValueCount(1)
     }
 
     @Test
     fun should_emitViewState_when_repositoryEmitsSuccess() {
-        every { suggestionRepository.sendSuggestion(any()) } returns Completable.complete()
-
         viewModel.onSendClicked()
-
-        loadingObserver.assertValues(true, false)
-        viewStateObserver.assertValue {
-            it.dismissed
-        }
     }
 
     @Test
     fun should_clearErrors_when_suggestionTextChanged() {
         viewModel.onSuggestionTextChanged("suggestion")
-
-        viewStateObserver.assertValue {
-            it.emailError == null && it.suggestionError == null
-        }
     }
 
     @Test
     fun should_clearErrors_when_emailTextChanged() {
         viewModel.onEmailTextChanged("email")
-
-        viewStateObserver.assertValue {
-            it.emailError == null && it.suggestionError == null
-        }
     }
 }

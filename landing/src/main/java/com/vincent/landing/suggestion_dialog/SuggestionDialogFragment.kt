@@ -9,9 +9,13 @@ import com.vincent.core.ui.BaseMvvmDialogFragment
 import com.vincent.landing.R
 
 import kotlinx.android.synthetic.main.dialog_suggestion.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 internal class SuggestionDialogFragment : BaseMvvmDialogFragment<SuggestionViewState>(
     R.layout.dialog_suggestion,
     suggestionModule

@@ -11,7 +11,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.android.ext.android.inject
 
 import kotlinx.android.synthetic.main.fragment_fact_list.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 internal class FactListFragment : BaseMvvmFragment<FactListViewState>(
     layoutId = R.layout.fragment_fact_list,
     menuId = R.menu.menu_fact_list,

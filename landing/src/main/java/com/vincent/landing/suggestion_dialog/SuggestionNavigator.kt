@@ -1,6 +1,8 @@
 package com.vincent.landing.suggestion_dialog
 
 import com.vincent.core.ui.BaseNavigator
-import com.vincent.core.utils.RxProvider
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-internal class SuggestionNavigator(rxProvider: RxProvider) : BaseNavigator(rxProvider)
+@ExperimentalCoroutinesApi
+internal class SuggestionNavigator(dispatcher: CoroutineDispatcher) : BaseNavigator(dispatcher)

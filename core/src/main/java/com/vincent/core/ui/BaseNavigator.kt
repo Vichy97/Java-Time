@@ -4,26 +4,30 @@ import android.net.Uri
 import android.os.Bundle
 
 import androidx.annotation.IdRes
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BroadcastChannel
 
-import com.vincent.core.utils.RxProvider
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 
-import io.reactivex.Observable
+@ExperimentalCoroutinesApi
+abstract class BaseNavigator constructor(dispatcher: CoroutineDispatcher) {
 
-abstract class BaseNavigator(rxProvider: RxProvider) {
+    private val uiScope = CoroutineScope(dispatcher)
+    private val navigationChannel = BroadcastChannel<NavigationEvent>(1)
 
-    private val navigationSubject = rxProvider.publishSubject<NavigationEvent>()
+    @FlowPreview
+    val navigationEvents: Flow<NavigationEvent> = navigationChannel.asFlow()
 
-    val navigationEvents: Observable<NavigationEvent> = navigationSubject
-
-    protected fun navigate(@IdRes actionId: Int, arguments: Bundle? = null) {
+    protected fun navigate(@IdRes actionId: Int, arguments: Bundle? = null) = uiScope.launch {
         val navigationEvent = NavigationEvent.IdEvent(actionId, arguments)
 
-        navigationSubject.onNext(navigationEvent)
+        navigationChannel.send(navigationEvent)
     }
 
-    protected fun navigate(uri: Uri) {
+    protected fun navigate(uri: Uri) = uiScope.launch {
         val navigationEvent = NavigationEvent.UriEvent(uri)
 
-        navigationSubject.onNext(navigationEvent)
+        navigationChannel.send(navigationEvent)
     }
 }

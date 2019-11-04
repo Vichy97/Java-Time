@@ -1,13 +1,15 @@
 package com.vincent.landing.suggestion_dialog.validation
 
-import com.vincent.core.utils.ResourceProvider
+import com.vincent.core.util.ResourceProvider
 import com.vincent.core_test.BaseTest
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import org.junit.Assert.*
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class SuggestionValidatorTest : BaseTest() {
 
     private val resourceProvider = mockk<ResourceProvider>(relaxed = true)
