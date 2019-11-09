@@ -13,7 +13,6 @@ internal class HeaderInterceptor : Interceptor {
         val original = chain.request()
         val request = original.newBuilder().apply {
             addHeader(Header.ACCEPT, MIME.JSON)
-            addHeader(Header.CONTENT_TYPE, MIME.FORM_URL_ENCODED)
             method(original.method(), original.body())
         }.build()
 

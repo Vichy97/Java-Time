@@ -1,7 +1,9 @@
 package com.vincent.landing.suggestion_dialog
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.View
+
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 
@@ -9,7 +11,6 @@ import com.vincent.core.ui.BaseMvvmDialogFragment
 import com.vincent.landing.R
 
 import kotlinx.android.synthetic.main.dialog_suggestion.*
-
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 internal class SuggestionDialogFragment : BaseMvvmDialogFragment<SuggestionViewState>(
@@ -18,6 +19,12 @@ internal class SuggestionDialogFragment : BaseMvvmDialogFragment<SuggestionViewS
 ) {
 
     override val viewModel: SuggestionViewModel by viewModel()
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.attributes?.windowAnimations = R.style.SuggestionDialogAnimations
+        return dialog
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -42,8 +42,8 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
-    implementation("androidx.fragment:fragment:1.2.0-rc01")
-    implementation("androidx.fragment:fragment-ktx:1.2.0-rc01")
+    implementation("androidx.fragment:fragment:1.2.0-rc02")
+    implementation("androidx.fragment:fragment-ktx:1.2.0-rc02")
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.1.0")
     implementation("com.google.firebase:firebase-analytics:17.2.1")
 
@@ -51,11 +51,11 @@ dependencies {
     api("com.google.android.material:material:1.2.0-alpha01")
     api("androidx.constraintlayout:constraintlayout:1.1.3")
     api("androidx.core:core-ktx:1.1.0")
-    api("androidx.navigation:navigation-fragment-ktx:2.2.0-rc01")
-    api("androidx.navigation:navigation-ui-ktx:2.2.0-rc01")
+    api("androidx.navigation:navigation-fragment-ktx:2.2.0-rc02")
+    api("androidx.navigation:navigation-ui-ktx:2.2.0-rc02")
     api("org.koin:koin-android:2.0.1")
     api("org.koin:koin-androidx-viewmodel:2.0.1")
-    api("com.squareup.moshi:moshi:1.8.0")
+    api("com.squareup.moshi:moshi:1.9.1")
     api("com.jakewharton.timber:timber:4.7.1")
     api("io.reactivex.rxjava2:rxandroid:2.1.1")
     api("com.crashlytics.sdk.android:crashlytics:2.10.1")
