@@ -68,7 +68,7 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":database"))
     implementation(project(":domain"))
-    implementation(project(":landing"))
+    implementation(project(":ui"))
 
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("com.facebook.stetho:stetho:1.5.1")
