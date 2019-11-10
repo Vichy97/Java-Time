@@ -2,6 +2,8 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("android.extensions")
+    kotlin("kapt")
+    id("io.objectbox")
 }
 
 android {
@@ -25,8 +27,8 @@ android {
 
     flavorDimensions("environment")
     productFlavors {
-        create("develop") {}
-        create("production") {}
+        create("develop") { }
+        create("production") { }
     }
 
     compileOptions {
@@ -43,8 +45,9 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     implementation(project(":core"))
-    implementation(project(":network"))
-    implementation(project(":database"))
 
-    testImplementation(project(":core-test"))
+    api("io.objectbox:objectbox-kotlin:2.4.1")
+    api("io.objectbox:objectbox-android:2.4.1")
+    api("io.objectbox:objectbox-rxjava:2.4.1")
+    kapt("io.objectbox:objectbox-processor:2.4.1")
 }

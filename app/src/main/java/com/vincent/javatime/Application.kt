@@ -8,6 +8,7 @@ import com.vincent.core.log.CrashlyticsTree
 
 import com.vincent.core.parsing.moshiModule
 import com.vincent.core.utils.utilsModule
+import com.vincent.database.databaseModule
 import com.vincent.domain.repository.repositoryModule
 import com.vincent.network.networkModule
 
@@ -23,6 +24,7 @@ class Application : Application() {
         utilsModule,
         moshiModule,
         networkModule,
+        databaseModule,
         repositoryModule,
         analyticsModule
     )

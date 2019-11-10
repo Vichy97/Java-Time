@@ -1,4 +1,5 @@
 buildscript {
+    extra["kotlin_version"] = "1.3.60-eap-25"
     repositories {
         google()
         jcenter()
@@ -10,6 +11,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.60-eap-25")
         classpath("com.google.gms:google-services:4.3.2")
         classpath("io.fabric.tools:gradle:1.31.1")
+        classpath("io.objectbox:objectbox-gradle-plugin:2.4.1")
     }
 }
 
