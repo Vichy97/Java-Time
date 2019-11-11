@@ -3,6 +3,7 @@ package com.vincent.ui.fact_list
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.viewpager2.widget.ViewPager2
 
 import com.vincent.core.ui.BaseMvvmFragment
 import com.vincent.ui.R
@@ -31,6 +32,14 @@ internal class FactListFragment : BaseMvvmFragment<FactListViewState>(
     private fun setupViewEvents() {
         fab.setOnClickListener { viewModel.onFloatingActionButtonClicked() }
         swipe_container.setOnRefreshListener { viewModel.onSwipeToRefresh() }
+        vp_fact_list.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                viewModel.onPageChanged(position)
+            }
+        })
     }
 
     private fun setupAdapter() {
@@ -49,6 +58,7 @@ internal class FactListFragment : BaseMvvmFragment<FactListViewState>(
 
     override fun onViewStateEvent(viewState: FactListViewState) {
         factListAdapter.setFacts(viewState.facts)
+        vp_fact_list.currentItem = viewState.currentPage
     }
 
     override fun showLoading(loading: Boolean) {

@@ -7,6 +7,7 @@ import com.vincent.core.analytics.analyticsModule
 import com.vincent.core.log.CrashlyticsTree
 
 import com.vincent.core.parsing.moshiModule
+import com.vincent.core.preferences.preferencesModule
 import com.vincent.core.utils.utilsModule
 import com.vincent.database.databaseModule
 import com.vincent.domain.repository.repositoryModule
@@ -26,6 +27,7 @@ class Application : Application() {
         networkModule,
         databaseModule,
         repositoryModule,
+        preferencesModule,
         analyticsModule
     )
 

@@ -1,6 +1,7 @@
 package com.vincent.ui.fact_list
 
 import com.vincent.core.analytics.AnalyticsService
+import com.vincent.core.preferences.Preferences
 import com.vincent.core.utils.ResourceProvider
 import com.vincent.core.utils.RxProvider
 import com.vincent.domain.repository.FactRepository
@@ -16,7 +17,8 @@ internal val factListModule = module {
             get<ResourceProvider>(),
             get<FactListNavigator>(),
             get<AnalyticsService>(),
-            get<FactRepository>()
+            get<FactRepository>(),
+            get<Preferences>()
         )
     }
 
