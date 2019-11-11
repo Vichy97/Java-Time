@@ -30,13 +30,13 @@ android {
         }
 
         getByName("release") {
-            isShrinkResources = false
+            isShrinkResources = true
             isMinifyEnabled = true
         }
 
         getByName("debug"){
-            isShrinkResources = false
-            isMinifyEnabled = false
+            isShrinkResources = true
+            isMinifyEnabled = true
         }
     }
 

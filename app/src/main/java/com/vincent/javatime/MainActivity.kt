@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
-        //setupActionBarWithNavController(navController, drawer_layout)
+        toolbar.setupWithNavController(navController)
     }
 
     private fun setupDrawerLayout() {

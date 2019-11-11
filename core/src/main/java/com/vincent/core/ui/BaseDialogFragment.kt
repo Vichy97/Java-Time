@@ -1,6 +1,5 @@
 package com.vincent.core.ui
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,15 +25,14 @@ abstract class BaseDialogFragment(
         module?.let { loadKoinModules(it) }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
+    @CallSuper
+    override fun onStart() {
+        super.onStart()
 
-        dialog.window?.setLayout(
+        dialog?.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-
-        return dialog
     }
 
     @CallSuper
