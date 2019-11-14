@@ -12,7 +12,9 @@ import com.google.android.material.snackbar.Snackbar
 
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import org.koin.core.error.DefinitionOverrideException
 import org.koin.core.module.Module
+import timber.log.Timber
 
 abstract class BaseDialogFragment(
     @LayoutRes private val layoutId: Int,
@@ -22,7 +24,11 @@ abstract class BaseDialogFragment(
     private var snackbar: Snackbar? = null
 
     init {
-        module?.let { loadKoinModules(it) }
+        try {
+            module?.let { loadKoinModules(it) }
+        } catch (e: DefinitionOverrideException) {
+            Timber.e(e)
+        }
     }
 
     @CallSuper
