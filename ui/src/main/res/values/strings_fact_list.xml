@@ -2,5 +2,5 @@
 <resources>
     <string name="fact_list_title">Java Time</string>
     <string name="about_button_title">About</string>
-
+    <string name="share_button_title">Share</string>
 </resources>

@@ -60,4 +60,8 @@ internal class FactListViewModel(
     fun onAboutClicked() {
         navigator.navigateToAbout()
     }
+
+    fun onShareClicked() {
+        navigator.showShareSheet()
+    }
 }

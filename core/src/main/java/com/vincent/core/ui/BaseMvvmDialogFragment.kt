@@ -81,6 +81,9 @@ abstract class BaseMvvmDialogFragment<VS : BaseViewState>(
             is NavigationEvent.IdEvent -> {
                 navController.navigate(navigationEvent.actionId, navigationEvent.arguments)
             }
+            is NavigationEvent.IntentEvent -> {
+                startActivity(navigationEvent.intent)
+            }
         }
     }
 

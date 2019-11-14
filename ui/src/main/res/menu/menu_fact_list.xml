@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_info"
         android:title="@string/about_button_title"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/btn_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/share_button_title"
+        app:showAsAction="ifRoom"/>
 </menu>

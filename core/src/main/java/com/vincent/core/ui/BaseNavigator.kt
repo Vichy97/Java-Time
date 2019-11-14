@@ -1,5 +1,6 @@
 package com.vincent.core.ui
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 
@@ -23,6 +24,12 @@ abstract class BaseNavigator(rxProvider: RxProvider) {
 
     protected fun navigate(uri: Uri) {
         val navigationEvent = NavigationEvent.UriEvent(uri)
+
+        navigationSubject.onNext(navigationEvent)
+    }
+
+    protected fun navigate(intent: Intent) {
+        val navigationEvent = NavigationEvent.IntentEvent(intent)
 
         navigationSubject.onNext(navigationEvent)
     }

@@ -52,6 +52,10 @@ internal class FactListFragment : BaseMvvmFragment<FactListViewState>(
                 viewModel.onAboutClicked()
                 true
             }
+            R.id.btn_share -> {
+                viewModel.onShareClicked()
+                true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
